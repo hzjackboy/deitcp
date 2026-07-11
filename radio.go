@@ -339,7 +339,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 					}
 					fmt.Fprintf(os.Stderr, "写入写频 panic: %v\n", r)
 					errDetail := fmt.Sprintf("错误详情: %v\n\n请确认：\n1. 对讲机已进入刷机模式（开机时按住PTT+PTT上方按键）\n2. 写频线连接正常\n3. 系统设置 > 隐私与安全性 > USB 配件 中已允许连接", r)
-					ui.ErrorPopup("USB通信错误", "写入写频数据时发生内部错误。\n"+errDetail)
+					ui.ErrorPopup(lang.T("USB通信错误", "USB Error"), "写入写频数据时发生内部错误。\n"+errDetail)
 				}
 			}()
 			valid := cp.Valid()
@@ -432,7 +432,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		factoryFirmwareDialog(modelURLs)
 	})
 
-	fwMenu.AddAction("写入RT3出厂固件", func() {
+	fwMenu.AddAction(lang.T("写入RT3出厂固件", "Write RT3 factory firmware"), func() {
 		dir := "https://farnsworth.org/dale/dmr/factory_firmware/rt3/"
 
 		modelURLs := []modelURL{
@@ -442,7 +442,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		factoryFirmwareDialog(modelURLs)
 	})
 
-	fwMenu.AddAction("写入RT8出厂固件", func() {
+	fwMenu.AddAction(lang.T("写入RT8出厂固件", "Write RT8 factory firmware"), func() {
 		dir := "https://farnsworth.org/dale/dmr/factory_firmware/rt8/"
 
 		modelURLs := []modelURL{
@@ -479,9 +479,9 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 	menu.AddSeparator()
 	writeUsersMenu := menu.AddMenu(lang.T("写入用户数据库到对讲机...", "Write user database to radio..."))
 
-	writeUsersMenu.AddAction("写入md380tools用户数据库到对讲机...", writeMD380toolsUsers)
-	writeUsersMenu.AddAction("写入MD2017用户数据库到对讲机...", writeMD2017Users)
-	writeUsersMenu.AddAction("写入MD-UV380用户数据库到对讲机...", writeUV380Users)
+	writeUsersMenu.AddAction(lang.T("写入md380tools用户数据库到对讲机...", "Write md380tools user database to radio..."), writeMD380toolsUsers)
+	writeUsersMenu.AddAction(lang.T("写入MD2017用户数据库到对讲机...", "Write MD2017 user database to radio..."), writeMD2017Users)
+	writeUsersMenu.AddAction(lang.T("写入MD-UV380用户数据库到对讲机...", "Write MD-UV380 user database to radio..."), writeUV380Users)
 
 	menu.AddSeparator()
 
@@ -489,7 +489,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 
 	md380toolsMenu.AddAction(lang.T("写入用户数据库到对讲机...", "Write user database to radio..."), writeMD380toolsUsers)
 
-	md380toolsMenu.AddAction("写入md380tools固件到对讲机...", func() {
+	md380toolsMenu.AddAction(lang.T("写入md380tools固件到对讲机...", "Write md380tools firmware to radio..."), func() {
 		path := "https://farnsworth.org/dale/md380tools/firmware/"
 		nonGpsURL := path + "D13.20.bin"
 		gpsURL := path + "S13.20.bin"
@@ -503,7 +503,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 			modelURL{"RT8 (S13.20)", gpsURL},
 		}
 
-		title := "写入md380tools固件到对讲机..."
+		title := lang.T("写入md380tools固件到对讲机...", "Write md380tools firmware to radio...")
 		upgrade := true
 		canceled, model, url := firmwareDialog(title, modelURLs, upgrade)
 		if canceled {
@@ -518,7 +518,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 
 		writeFirmware(url, msgs)
 	})
-	md380toolsMenu.AddAction("写入KD4Z md380tools固件到对讲机...", func() {
+	md380toolsMenu.AddAction(lang.T("写入KD4Z md380tools固件到对讲机...", "Write KD4Z md380tools firmware to radio..."), func() {
 		path := "https://farnsworth.org/dale/md380tools/kd4z/"
 		nonGpsURL := path + "firmware-noGPS.bin"
 		gpsURL := path + "firmware-GPS.bin"
@@ -532,7 +532,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 			modelURL{"RT8 (S13.20)", gpsURL},
 		}
 
-		title := "写入KD4Z md380tools固件到对讲机..."
+		title := lang.T("写入KD4Z md380tools固件到对讲机...", "Write KD4Z md380tools firmware to radio...")
 		upgrade := true
 		canceled, model, url := firmwareDialog(title, modelURLs, upgrade)
 		if canceled {
@@ -619,7 +619,7 @@ func writeFirmware(url string, msgs []string) {
 	}
 
 	msg := "关闭对讲机后重新开机。"
-	ui.InfoPopup("固件写入完成", msg)
+	ui.InfoPopup(lang.T("固件写入完成", "Firmware write complete"), msg)
 }
 
 func userdbFilename() string {
@@ -656,7 +656,7 @@ func userdbDialog(title string, labelText string) (canceled, download bool) {
 	form := dialog.AddForm()
 	form.AddRow("下载新的用户数据库文件", downloadCheckbox)
 
-	dialog.AddLabel("文件名：")
+	dialog.AddLabel(lang.T("文件名：", "Filename:"))
 	dialog.AddExistingHbox(filenameBox)
 
 	row := dialog.AddHbox()
@@ -716,7 +716,7 @@ func firmwareDialog(title string, modelURLs []modelURL, upgrade bool) (canceled 
 
 	dialog.AddLabel(labelText[1:])
 
-	groupBox := dialog.AddGroupbox("选择对讲机型号")
+	groupBox := dialog.AddGroupbox(lang.T("选择对讲机型号", "Select Radio Model"))
 	form := groupBox.AddForm()
 	form.AddRow("对讲机型号", modelCombobox)
 

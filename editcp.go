@@ -257,7 +257,7 @@ func displayPreviousPanic(text string) {
 
 	vBox := mw.AddVbox()
 	vBox.AddSpace(1)
-	vBox.AddLabel("editcp 上次崩溃时留下以下信息：")
+	vBox.AddLabel(lang.T("editcp 上次崩溃时留下以下信息：", "editcp previously crashed leaving this message:"))
 
 	tEdit := vBox.AddTextEdit()
 	tEdit.SetReadOnly(true)
@@ -271,7 +271,7 @@ func displayPreviousPanic(text string) {
 	cb := ui.NewCheckboxWidget(false, func(checked bool) {
 		removeFile = checked
 	})
-	cb.SetLabel("删除此信息？")
+	cb.SetLabel(lang.T("删除此信息？", "Delete this message?"))
 	form.AddWidget(cb)
 
 	hBox := vBox.AddHbox()
@@ -614,7 +614,7 @@ func typeFrequencyRange(cp *codeplug.Codeplug) (typ string, freqRange string) {
 		}
 	})
 
-	dialog.AddLabel("选择写频的型号和频率范围。")
+	dialog.AddLabel(lang.T("选择写频的型号和频率范围。", "Select the codeplug model and frequency range."))
 	form = dialog.AddForm()
 	form.AddRow("", mCb)
 	form.AddRow("", vCbA)
@@ -1386,7 +1386,7 @@ func addRecordSelector(box *ui.VBox, writable bool) {
 		add.ConnectClicked(func() {
 			err := rl.AddSelected()
 			if err != nil {
-				ui.ErrorPopup("添加记录", err.Error())
+				ui.ErrorPopup(lang.T("添加记录", "Add Record"), err.Error())
 				return
 			}
 		})
@@ -1395,7 +1395,7 @@ func addRecordSelector(box *ui.VBox, writable bool) {
 		dup.ConnectClicked(func() {
 			err := rl.DupSelected()
 			if err != nil {
-				ui.ErrorPopup("复制记录", err.Error())
+				ui.ErrorPopup(lang.T("复制记录", "Dup Record"), err.Error())
 				return
 			}
 		})
@@ -1405,7 +1405,7 @@ func addRecordSelector(box *ui.VBox, writable bool) {
 		delete.ConnectClicked(func() {
 			err := rl.RemoveSelected()
 			if err != nil {
-				ui.ErrorPopup("删除记录", err.Error())
+				ui.ErrorPopup(lang.T("删除记录", "Delete Record"), err.Error())
 				return
 			}
 		})

@@ -27,6 +27,7 @@ import (
 	"strings"
 
 	"github.com/dalefarnsworth-dmr/ui"
+	"github.com/dalefarnsworth-dmr/editcp/lang"
 )
 
 func errorText(edt *editor) string {
@@ -46,13 +47,13 @@ func errorText(edt *editor) string {
 func checkCodeplug(edt *editor) {
 	w := edt.mainWindow.NewWindow()
 	cp := edt.codeplug
-	w.SetTitle(cp.Filename() + edt.titleSuffix() + " 无效字段")
+	w.SetTitle(cp.Filename() + edt.titleSuffix() + lang.T(" 无效字段", " Invalid Fields"))
 
 	windowBox := w.AddVbox()
 
 	var t *ui.TextEdit
 
-	b := windowBox.AddButton("重新扫描无效值")
+	b := windowBox.AddButton(lang.T("重新扫描无效值", "Re-scan invalid values"))
 	b.ConnectClicked(func() {
 		t.SetPlainText(errorText(edt))
 	})
