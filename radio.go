@@ -328,6 +328,18 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 	})
 
 	menu.AddAction("写入写频到对讲机", func() {
+			// recover 保护，防止 USB 通信崩溃导致整个 App 退出
+			defer func() {
+				if r := recover(); r != nil {
+					l.Printf("写入写频 panicked: %v", r)
+					ui.ErrorPopup("USB通信错误",
+						"写入写频数据时发生内部错误。\n"+
+							"请确认：\n"+
+							"1. 对讲机已进入刷机模式（开机时按住PTT+PTT上方按键）\n"+
+							"2. 写频线连接正常\n"+
+							"3. 系统设置 > 隐私与安全性 > USB 配件 中已允许连接")
+				}
+			}()
 		valid := cp.Valid()
 		edt.updateMenuBar()
 		if !valid {
