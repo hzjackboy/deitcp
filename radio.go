@@ -327,11 +327,15 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		edt.updateMenuBar()
 	})
 
-	menu.AddAction("写入写频到对讲机", func() {
-			// recover 保护，防止 USB 通信崩溃导致整个 App 退出
+		menu.AddAction("写入写频到对讲机", func() {
+			var pd *ui.ProgressDialog
+			var progressShown bool
 			defer func() {
 				if r := recover(); r != nil {
 					l.Printf("写入写频 panicked: %v", r)
+					if progressShown && pd != nil {
+						pd.Close()
+					}
 					ui.ErrorPopup("USB通信错误",
 						"写入写频数据时发生内部错误。\n"+
 							"请确认：\n"+
@@ -340,63 +344,65 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 							"3. 系统设置 > 隐私与安全性 > USB 配件 中已允许连接")
 				}
 			}()
-		valid := cp.Valid()
-		edt.updateMenuBar()
-		if !valid {
-			fmtStr := `
-	%d records with invalid field values were found in the codeplug.
+			valid := cp.Valid()
+			edt.updateMenuBar()
+			if !valid {
+				fmtStr := `
+		%d records with invalid field values were found in the codeplug.
 
-	Click on Cancel and then select "Menu->Edit->Show Invalid Fields" to view them.
+		Click on Cancel and then select "Menu->Edit->Show Invalid Fields" to view them.
 
-	Or, click on Ignore to continue writing to the radio.`
-			msg := fmt.Sprintf(fmtStr, len(cp.Warnings()))
-			title := "写入警告"
-			rv := ui.WarningPopup(title, msg)
-			if rv != ui.PopupIgnore {
+		Or, click on Ignore to continue writing to the radio.`
+				msg := fmt.Sprintf(fmtStr, len(cp.Warnings()))
+				title := "写入警告"
+				rv := ui.WarningPopup(title, msg)
+				if rv != ui.PopupIgnore {
+					return
+				}
+			}
+
+			title := "写入写频到对讲机"
+			model := codeplug.ModelTypes(cp.Model())
+			freq := cp.FrequencyRange()
+			warn := `
+
+		WARNING: Corruption may occur if a signal is received
+		while writing to the radio.  The radio should be tuned
+		to an unprogrammed (or at least quiet) channel while
+		writing the new codeplug.`
+			msg := fmt.Sprintf("%s\n\nWrite %s %s codeplug to radio?\n", warn, model, freq)
+			if ui.YesNoPopup(title, msg) != ui.PopupYes {
 				return
 			}
-		}
 
-		title := "写入写频到对讲机"
-		model := codeplug.ModelTypes(cp.Model())
-		freq := cp.FrequencyRange()
-		warn := `
-
-	WARNING: Corruption may occur if a signal is received
-	while writing to the radio.  The radio should be tuned
-	to an unprogrammed (or at least quiet) channel while
-	writing the new codeplug.`
-		msg := fmt.Sprintf("%s\n\nWrite %s %s codeplug to radio?\n", warn, model, freq)
-		if ui.YesNoPopup(title, msg) != ui.PopupYes {
-			return
-		}
-
-		msgs := []string{
-			"准备写入写频到对讲机...",
-			"正在擦除对讲机写频...",
-			"正在写入写频到对讲机...",
-		}
-		msgIndex := 0
-
-		pd := ui.NewProgressDialog(msgs[msgIndex])
-		pd.SetRange(codeplug.MinProgress, codeplug.MaxProgress)
-		err := cp.WriteRadio(func(cur int) error {
-			if cur == codeplug.MinProgress {
-				pd.SetLabelText(msgs[msgIndex])
-				msgIndex++
+			msgs := []string{
+				"准备写入写频到对讲机...",
+				"正在擦除对讲机写频...",
+				"正在写入写频到对讲机...",
 			}
-			pd.SetValue(cur)
-			if pd.WasCanceled() {
-				return errors.New("cancelled")
-			}
-			return nil
-		})
-		if err != nil {
+			msgIndex := 0
+
+			pd = ui.NewProgressDialog(msgs[msgIndex])
+			progressShown = true
+			pd.SetRange(codeplug.MinProgress, codeplug.MaxProgress)
+			err := cp.WriteRadio(func(cur int) error {
+				if cur == codeplug.MinProgress {
+					pd.SetLabelText(msgs[msgIndex])
+					msgIndex++
+				}
+				pd.SetValue(cur)
+				if pd.WasCanceled() {
+					return errors.New("cancelled")
+				}
+				return nil
+			})
+			progressShown = false
 			pd.Close()
-			title := "写入写频到对讲机失败"
-			ui.ErrorPopup(title, err.Error())
-		}
-	}).SetEnabled(cp != nil && cp.Loaded())
+			if err != nil {
+				title := "写入写频到对讲机失败"
+				ui.ErrorPopup(title, err.Error()+"\n\n请确保对讲机处于刷机模式，写频线连接正常。")
+			}
+		}).SetEnabled(cp != nil && cp.Loaded())
 
 	menu.AddSeparator()
 
