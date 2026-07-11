@@ -93,9 +93,9 @@ func checkAutosave(filename string) {
 	}
 
 	backupFilename := filename + ".backup"
-	title := "Autosave file found"
-	msg := "An automatically saved backup for %s exists. " +
-		"Would you like to restore the file from its backup? "
+	title := "发现自动保存文件"
+	msg := "文件 %s 存在自动保存的备份。\n" +
+		"是否从备份中恢复该文件？"
 	msg = fmt.Sprintf(msg, filename)
 	switch ui.YesNoPopup(title, msg) {
 	case ui.PopupYes:
@@ -103,7 +103,7 @@ func checkAutosave(filename string) {
 		os.Rename(asFilename, filename)
 		msg := fmt.Sprintf("%s has been saved as %s",
 			filename, backupFilename)
-		ui.InfoPopup("Backup created", msg)
+		ui.InfoPopup("备份已创建", msg)
 	default:
 		break
 	}
@@ -114,14 +114,14 @@ func (edt *editor) revertFile() error {
 
 	cp := edt.codeplug
 	if cp.Changed() {
-		title := fmt.Sprintf("Revert %s", cp.Filename())
-		msg := cp.Filename() + " has been modified.\n"
-		msg += "Are you sure you want to discard the changes?"
+		title := fmt.Sprintf("还原 %s", cp.Filename())
+		msg := cp.Filename() + " 已被修改。\n"
+		msg += "确定要放弃更改吗？"
 		switch ui.YesNoPopup(title, msg) {
 		case ui.PopupYes:
 			err := edt.codeplug.Revert()
 			if err != nil {
-				ui.ErrorPopup("Revert Failed", err.Error())
+				ui.ErrorPopup("还原失败", err.Error())
 			}
 			edt.updateMenuBar()
 			edt.mainWindow.CodeplugChanged(nil)
@@ -159,7 +159,7 @@ func (edt *editor) saveAs(filename string) string {
 		base := baseFilename(edt.codeplug.Filename())
 		ext := cp.Ext()
 		dir = filepath.Join(dir, base+"."+ext)
-		filename = ui.SaveFilename("Save codeplug file", dir, ext)
+		filename = ui.SaveFilename("保存写频文件", dir, ext)
 		if filename == "" {
 			return ""
 		}
@@ -245,7 +245,7 @@ func displayPreviousPanic(text string) {
 
 	mw := ui.NewMainWindow()
 	mw.Resize(600, 400)
-	mw.SetTitle("Previous Crash Message")
+	mw.SetTitle("上一次崩溃信息")
 	mw.ConnectClose(func() bool {
 		if removeFile {
 			l.RemovePreviousPanicFile()
@@ -256,7 +256,7 @@ func displayPreviousPanic(text string) {
 
 	vBox := mw.AddVbox()
 	vBox.AddSpace(1)
-	vBox.AddLabel("editcp previously crashed leaving this message:")
+	vBox.AddLabel("editcp 上次崩溃时留下以下信息：")
 
 	tEdit := vBox.AddTextEdit()
 	tEdit.SetReadOnly(true)
@@ -270,14 +270,14 @@ func displayPreviousPanic(text string) {
 	cb := ui.NewCheckboxWidget(false, func(checked bool) {
 		removeFile = checked
 	})
-	cb.SetLabel("Delete this message?")
+	cb.SetLabel("删除此信息？")
 	form.AddWidget(cb)
 
 	hBox := vBox.AddHbox()
 	hBox.AddFiller()
 	hBox.SetFixedHeight()
 
-	button := ui.NewButtonWidget("Close", func() {
+	button := ui.NewButtonWidget("关闭", func() {
 		mw.Close()
 	})
 	hBox.AddWidget(button)
@@ -376,7 +376,7 @@ func (edt *editor) openCodeplug(fType codeplug.FileType, filename string) {
 
 		cp, err := codeplug.NewCodeplug(fType, filename)
 		if err != nil {
-			ui.ErrorPopup("Codeplug Error", err.Error())
+			ui.ErrorPopup("写频文件错误", err.Error())
 			return
 		}
 
@@ -391,7 +391,7 @@ func (edt *editor) openCodeplug(fType codeplug.FileType, filename string) {
 
 		err = cp.Load(typ, freqRange)
 		if err != nil {
-			ui.ErrorPopup("Codeplug Load Error", err.Error())
+			ui.ErrorPopup("写频数据加载错误", err.Error())
 			return
 		}
 		if !cp.Valid() {
@@ -400,7 +400,7 @@ func (edt *editor) openCodeplug(fType codeplug.FileType, filename string) {
 
 Select "Menu->Edit->Show Invalid Fields" to view them.`
 			msg := fmt.Sprintf(fmtStr, len(cp.Warnings()))
-			ui.InfoPopup("codeplug warning", msg)
+			ui.InfoPopup("写频警告", msg)
 		}
 		edt.updateMenuBar()
 
@@ -482,7 +482,7 @@ func typeFrequencyRange(cp *codeplug.Codeplug) (typ string, freqRange string) {
 
 	typ = settings.model
 
-	mOpts := append([]string{"<select model>"}, types...)
+	mOpts := append([]string{"<选择型号>"}, types...)
 
 	var vOptsA []string
 	var rangeA string
@@ -495,21 +495,21 @@ func typeFrequencyRange(cp *codeplug.Codeplug) (typ string, freqRange string) {
 
 	rangeA = settingRanges[0] + " MHz"
 	if len(rangesB) == 0 {
-		vOptsA = append([]string{"<select frequency range>"}, rangesA...)
+		vOptsA = append([]string{"<选择频率范围>"}, rangesA...)
 	} else {
-		vOptsA = append([]string{"<select frequency range A>"}, rangesA...)
+		vOptsA = append([]string{"<选择频率范围 A>"}, rangesA...)
 	}
 	if len(settingRanges) > 1 {
 		rangeB = settingRanges[1] + " MHz"
 	}
-	vOptsB := append([]string{"<select frequency range B>"}, rangesB...)
+	vOptsB := append([]string{"<选择频率范围 B>"}, rangesB...)
 
-	dialog := ui.NewDialog("Select codeplug type")
+	dialog := ui.NewDialog("选择写频类型")
 
-	cancelButton := ui.NewButtonWidget("Cancel", func() {
+	cancelButton := ui.NewButtonWidget("取消", func() {
 		dialog.Reject()
 	})
-	okButton := ui.NewButtonWidget("Ok", func() {
+	okButton := ui.NewButtonWidget("确定", func() {
 		dialog.Accept()
 	})
 	opt := vOptsA[0]
@@ -572,14 +572,14 @@ func typeFrequencyRange(cp *codeplug.Codeplug) (typ string, freqRange string) {
 		settingRanges := strings.Split(settings.freqRange, "_")
 		rangeA = settingRanges[0] + " MHz"
 		if len(rangesB) == 0 {
-			vOptsA = append([]string{"<select frequency range>"}, rangesA...)
+			vOptsA = append([]string{"<选择频率范围>"}, rangesA...)
 		} else {
-			vOptsA = append([]string{"<select frequency range A>"}, rangesA...)
+			vOptsA = append([]string{"<选择频率范围 A>"}, rangesA...)
 		}
 		if len(settingRanges) > 1 {
 			rangeB = settingRanges[1] + " MHz"
 		}
-		vOptsB = append([]string{"<select frequency range B>"}, rangesB...)
+		vOptsB = append([]string{"<选择频率范围 B>"}, rangesB...)
 		vCbA.SetEnabled(containsString(typ, mOpts[1:]))
 
 		opt := vOptsA[0]
@@ -613,7 +613,7 @@ func typeFrequencyRange(cp *codeplug.Codeplug) (typ string, freqRange string) {
 		}
 	})
 
-	dialog.AddLabel("Select the codeplug model and frequency range.")
+	dialog.AddLabel("选择写频的型号和频率范围。")
 	form = dialog.AddForm()
 	form.AddRow("", mCb)
 	form.AddRow("", vCbA)
@@ -702,9 +702,9 @@ func newEditor(app *ui.App, fType codeplug.FileType, filename string) *editor {
 			}
 
 			if count == 1 && cp.Changed() {
-				title := fmt.Sprintf("Save %s", cp.Filename())
-				msg := cp.Filename() + " has been modified.\n"
-				msg += "Do you want to save the changes?"
+				title := fmt.Sprintf("保存 %s", cp.Filename())
+				msg := cp.Filename() + " 已被修改。\n"
+				msg += "是否保存更改？"
 				switch ui.SavePopup(title, msg) {
 				case ui.PopupSave:
 					if edt.save() == "" {
@@ -753,172 +753,172 @@ func (edt *editor) updateMenuBar() {
 	cp := edt.codeplug
 	mb := edt.mainWindow.MenuBar()
 	mb.Clear()
-	menu := mb.AddMenu("File")
-	menu.AddAction("New...", func() {
+	menu := mb.AddMenu("文件")
+	menu.AddAction("新建...", func() {
 		newEditor(edt.app, codeplug.FileTypeNew, "")
 	})
-	menu.AddAction("Open...", func() {
+	menu.AddAction("打开...", func() {
 		dir := settings.codeplugDirectory
 		exts := edt.codeplug.AllExts()
-		filenames := ui.OpenCPFilenames("Open codeplug file", dir, exts)
+		filenames := ui.OpenCPFilenames("打开写频文件", dir, exts)
 		for _, filename := range filenames {
 			if filename != "" {
 				newEditor(edt.app, codeplug.FileTypeNone, filename)
 			}
 		}
 	})
-	recentMenu := menu.AddMenu("Open Recent...")
+	recentMenu := menu.AddMenu("最近打开...")
 	recentMenu.ConnectAboutToShow(func() {
 		edt.updateRecentMenu(recentMenu)
 	})
 	recentMenu.SetEnabled(len(settings.recentFiles) != 0)
 
-	menu.AddAction("Revert", func() {
+	menu.AddAction("还原", func() {
 		edt.revertFile()
 	}).SetEnabled(cp != nil)
 
 	menu.AddSeparator()
 
-	menu.AddAction("Convert codeplug to new radio type...", func() {
+	menu.AddAction("转换写频到新型号...", func() {
 		edt.convertCodeplug()
 	}).SetEnabled(cp != nil)
 
 	menu.AddSeparator()
 
-	importMenu := menu.AddMenu("Import...")
-	importMenu.AddAction("Import text file...", func() {
+	importMenu := menu.AddMenu("导入...")
+	importMenu.AddAction("导入文本文件..."...unc() {
 		edt.importText()
 	})
 
-	importMenu.AddAction("Import Spreadsheet file...", func() {
+	importMenu.AddAction("导入表格文件..."), func() {
 		edt.importXLSX()
 	})
 
-	importMenu.AddAction("Import JSON file...", func() {
+	importMenu.AddAction("导入JSON文件..."), func() {
 		edt.importJSON()
 	})
 
-	exportMenu := menu.AddMenu("Export...")
+	exportMenu := menu.AddMenu("导出...")
 	exportMenu.SetEnabled(cp != nil)
 
-	exportMenu.AddAction("Export to text...", func() {
+	exportMenu.AddAction("导出为文本..."), func() {
 		edt.exportText()
 	})
 
-	exportMenu.AddAction("Export to text (one line per record)...", func() {
+	exportMenu.AddAction("导出为文本(每条记录一行)..."), func() {
 		edt.exportTextOneLineRecords()
 	})
 
-	exportMenu.AddAction("Export to Spreadsheet...", func() {
+	exportMenu.AddAction("导出为表格..."), func() {
 		edt.exportXLSX()
 	})
 
-	exportMenu.AddAction("Export to JSON...", func() {
+	exportMenu.AddAction("导出为JSON..."), func() {
 		edt.exportJSON()
 	})
 
 	menu.AddSeparator()
 
-	menu.AddAction("Save", func() {
+	menu.AddAction("保存", func() {
 		edt.save()
 	}).SetEnabled(cp != nil)
 
-	menu.AddAction("Save As...", func() {
+	menu.AddAction("另存为...", func() {
 		edt.saveAs("")
 	}).SetEnabled(cp != nil)
 
 	menu.AddSeparator()
 
-	menu.AddAction("Close", func() {
+	menu.AddAction("关闭", func() {
 		edt.mainWindow.Close()
 	})
 
-	menu.AddAction("Quit", func() {
+	menu.AddAction("退出", func() {
 		for i := len(editors) - 1; i >= 0; i-- {
 			editors[i].mainWindow.Close()
 		}
 	})
 
 	var showInvalidAction *ui.Action
-	menu = mb.AddMenu("Edit")
+	menu = mb.AddMenu("编辑")
 	menu.ConnectAboutToShow(func() {
 		showInvalidAction.SetEnabled(cp != nil && len(cp.Warnings()) != 0)
 	})
-	menu.AddAction("Basic Information", func() {
+	menu.AddAction("基本信息", func() {
 		basicInformation(edt)
 	}).SetEnabled(cp != nil)
 
-	menu.AddAction("General Settings", func() {
+	menu.AddAction("常规设置", func() {
 		generalSettings(edt)
 	}).SetEnabled(cp != nil)
 
-	menu.AddAction("Menu Items", func() {
+	menu.AddAction("菜单项", func() {
 		menuItems(edt)
 	}).SetEnabled(cp != nil)
 
-	menu.AddAction("Button Definitions", func() {
+	menu.AddAction("按键定义", func() {
 		buttonDefinitions(edt)
 	}).SetEnabled(cp != nil)
 
-	menu.AddAction("Text Messages", func() {
+	menu.AddAction("短信", func() {
 		textMessages(edt)
 	}).SetEnabled(cp != nil)
 
-	menu.AddAction("Privacy Settings", func() {
+	menu.AddAction("隐私设置", func() {
 		privacySettings(edt)
 	}).SetEnabled(cp != nil)
 
-	menu.AddAction("Channels", func() {
+	menu.AddAction("信道", func() {
 		channels(edt)
 	}).SetEnabled(cp != nil)
 
-	menu.AddAction("Contacts", func() {
+	menu.AddAction("联系人", func() {
 		contacts(edt)
 	}).SetEnabled(cp != nil)
 
-	menu.AddAction("RX Group Lists", func() {
+	menu.AddAction("接收组列表", func() {
 		groupLists(edt)
 	}).SetEnabled(cp != nil)
 
-	menu.AddAction("Scan Lists", func() {
+	menu.AddAction("扫描列表", func() {
 		scanLists(edt)
 	}).SetEnabled(cp != nil)
 
-	menu.AddAction("Zones", func() {
+	menu.AddAction("区域", func() {
 		zones(edt)
 	}).SetEnabled(cp != nil)
 
 	if cp != nil && cp.HasRecordType(codeplug.RtGPSSystems) {
-		menu.AddAction("GPS Systems", func() {
+		menu.AddAction("GPS系统", func() {
 			gpsSystems(edt)
 		}).SetEnabled(cp != nil && settings.gpsEnabled)
 	}
 
 	menu.AddSeparator()
 
-	showInvalidAction = menu.AddAction("Show Invalid Fields", func() {
+	showInvalidAction = menu.AddAction("显示无效字段", func() {
 		checkCodeplug(edt)
 	})
 	showInvalidAction.SetEnabled(cp != nil && len(cp.Warnings()) != 0)
 
 	menu.AddSeparator()
 
-	menu.AddAction("Preferences...", func() {
+	menu.AddAction("偏好设置...", func() {
 		edt.preferences()
 	})
 
 	edt.addRadioMenu(menu)
 
-	windowsMenu := mb.AddMenu("Windows")
+	windowsMenu := mb.AddMenu("窗口")
 	windowsMenu.ConnectAboutToShow(func() {
 		edt.updateWindowsMenu(windowsMenu)
 	})
 
-	menu = mb.AddMenu("Help")
-	menu.AddAction("About...", func() {
+	menu = mb.AddMenu("帮助")
+	menu.AddAction("关于...", func() {
 		about()
 	})
-	menu.AddAction("Thanks...", func() {
+	menu.AddAction("致谢...", func() {
 		thanks()
 	})
 }
@@ -935,52 +935,52 @@ func (edt *editor) updateButtons() {
 
 	column := row.AddVbox()
 
-	biButton := column.AddButton("Basic Information")
+	biButton := column.AddButton("基本信息")
 	biButton.SetEnabled(cp != nil)
 	biButton.ConnectClicked(func() { basicInformation(edt) })
 
-	gsButton := column.AddButton("General Settings")
+	gsButton := column.AddButton("常规设置")
 	gsButton.SetEnabled(cp != nil)
 	gsButton.ConnectClicked(func() { generalSettings(edt) })
 
-	miButton := column.AddButton("Menu Items")
+	miButton := column.AddButton("菜单项")
 	miButton.SetEnabled(cp != nil)
 	miButton.ConnectClicked(func() { menuItems(edt) })
 
-	bdButton := column.AddButton("Button Definitions")
+	bdButton := column.AddButton("按键定义")
 	bdButton.SetEnabled(cp != nil)
 	bdButton.ConnectClicked(func() { buttonDefinitions(edt) })
 
-	tmButton := column.AddButton("Text Messages")
+	tmButton := column.AddButton("短信")
 	tmButton.SetEnabled(cp != nil)
 	tmButton.ConnectClicked(func() { textMessages(edt) })
 
-	psButton := column.AddButton("Privacy Settings")
+	psButton := column.AddButton("隐私设置")
 	psButton.SetEnabled(cp != nil)
 	psButton.ConnectClicked(func() { privacySettings(edt) })
 
-	ciButton := column.AddButton("Channels")
+	ciButton := column.AddButton("信道")
 	ciButton.SetEnabled(cp != nil)
 	ciButton.ConnectClicked(func() { channels(edt) })
 
-	dcButton := column.AddButton("Contacts")
+	dcButton := column.AddButton("联系人")
 	dcButton.SetEnabled(cp != nil)
 	dcButton.ConnectClicked(func() { contacts(edt) })
 
-	glButton := column.AddButton("RX Group Lists")
+	glButton := column.AddButton("接收组列表")
 	glButton.SetEnabled(cp != nil)
 	glButton.ConnectClicked(func() { groupLists(edt) })
 
-	slButton := column.AddButton("Scan Lists")
+	slButton := column.AddButton("扫描列表")
 	slButton.SetEnabled(cp != nil)
 	slButton.ConnectClicked(func() { scanLists(edt) })
 
-	ziButton := column.AddButton("Zones")
+	ziButton := column.AddButton("区域")
 	ziButton.SetEnabled(cp != nil)
 	ziButton.ConnectClicked(func() { zones(edt) })
 
 	if cp != nil && cp.HasRecordType(codeplug.RtGPSSystems) {
-		gpButton := column.AddButton("GPS Systems")
+		gpButton := column.AddButton("GPS系统")
 		gpButton.SetEnabled(cp != nil && settings.gpsEnabled)
 		gpButton.ConnectClicked(func() { gpsSystems(edt) })
 	}
@@ -994,7 +994,7 @@ func (edt *editor) updateButtons() {
 }
 
 func (edt *editor) updateFilename() {
-	title := "Codeplug Editor"
+	title := "写频编辑器"
 	cp := edt.codeplug
 	if cp != nil {
 		filename := cp.Filename()
@@ -1086,7 +1086,7 @@ func (edt *editor) exportText() {
 	base := baseFilename(edt.codeplug.Filename())
 	ext := "txt"
 	dir = filepath.Join(dir, base+"."+ext)
-	filename := ui.SaveFilename("Export to text file", dir, ext)
+	filename := ui.SaveFilename("导出为文本文件", dir, ext)
 	if filename == "" {
 		return
 	}
@@ -1106,7 +1106,7 @@ func (edt *editor) exportTextOneLineRecords() {
 	base := baseFilename(edt.codeplug.Filename())
 	ext := "txt"
 	dir = filepath.Join(dir, base+"."+ext)
-	filename := ui.SaveFilename("Export to text file", dir, ext)
+	filename := ui.SaveFilename("导出为文本文件", dir, ext)
 	if filename == "" {
 		return
 	}
@@ -1146,14 +1146,14 @@ func (edt *editor) convertCodeplug() {
 
 Select "Menu->Edit->Show Invalid Fields" to view them.`
 		msg := fmt.Sprintf(fmtStr, len(cp.Warnings()))
-		ui.InfoPopup("codeplug warning", msg)
+		ui.InfoPopup("写频警告", msg)
 	}
 	edt.updateMenuBar()
 }
 
 func (edt *editor) importText() {
 	dir := settings.codeplugDirectory
-	filename := ui.OpenTextFilename("Import text file", dir)
+	filename := ui.OpenTextFilename("导入文本文件", dir)
 	if filename == "" {
 		return
 	}
@@ -1165,7 +1165,7 @@ func (edt *editor) importText() {
 
 func (edt *editor) importXLSX() {
 	dir := settings.codeplugDirectory
-	filename := ui.OpenXLSXFilename("Import Spreadsheet file", dir)
+	filename := ui.OpenXLSXFilename("导入表格文件", dir)
 	if filename == "" {
 		return
 	}
@@ -1180,7 +1180,7 @@ func (edt *editor) exportXLSX() {
 	base := baseFilename(edt.codeplug.Filename())
 	ext := "xlsx"
 	dir = filepath.Join(dir, base+"."+ext)
-	filename := ui.SaveFilename("Export to Spreadsheet file", dir, ext)
+	filename := ui.SaveFilename("导出为表格文件", dir, ext)
 	if filename == "" {
 		return
 	}
@@ -1197,7 +1197,7 @@ func (edt *editor) exportXLSX() {
 
 func (edt *editor) importJSON() {
 	dir := settings.codeplugDirectory
-	filename := ui.OpenJSONFilename("Import JSON file", dir)
+	filename := ui.OpenJSONFilename("导入JSON文件", dir)
 	if filename == "" {
 		return
 	}
@@ -1212,7 +1212,7 @@ func (edt *editor) exportJSON() {
 	base := baseFilename(edt.codeplug.Filename())
 	ext := "json"
 	dir = filepath.Join(dir, base+"."+ext)
-	filename := ui.SaveFilename("Export to JSON file", dir, ext)
+	filename := ui.SaveFilename("导出为JSON文件", dir, ext)
 	if filename == "" {
 		return
 	}
@@ -1245,31 +1245,31 @@ dale@farnsworth.org
 The source code for editcp may be found at
 https://github.com/dalefarnsworth-dmr/editcp
 `
-	ui.InfoPopup("About editcp", msg)
+	ui.InfoPopup("关于 editcp", msg)
 }
 
 func thanks() {
 	msgs := []string{
-		"A big thank you to:",
-		"  José Melo, CT4TX, for creating the nice logo",
-		"  Ron McMurdy, W5QLD, for reporting bugs",
-		"  Markus Lenggenhager, HB9BRJ, for reporting bugs",
-		"  Roy G. Jackson, KW4G, for reporting bugs",
-		"  Kevin Otte, N8VNR, for reporting bugs",
-		"  Andreas Krüger, DJ3EI, for reporting bugs",
-		"  Martin Jones, KI0KO, for reporting bugs",
-		"  Marco Carrara, IW2KWD, for suggesting improvements",
-		"  Bob Finch, W9YA, for reporting bugs",
-		"  Tyler Tidman, VA3DGN, for reporting bugs + RT90 & MD-9600 support",
+		"衷心感谢以下人士：",
+		"  José Melo, CT4TX - 制作精美标志",
+		"  Ron McMurdy, W5QLD - 报告错误",
+		"  Markus Lenggenhager, HB9BRJ - 报告错误",
+		"  Roy G. Jackson, KW4G - 报告错误",
+		"  Kevin Otte, N8VNR - 报告错误",
+		"  Andreas Krüger, DJ3EI - 报告错误",
+		"  Martin Jones, KI0KO - 报告错误",
+		"  Marco Carrara, IW2KWD - 改进建议",
+		"  Bob Finch, W9YA - 报告错误",
+		"  Tyler Tidman, VA3DGN - 报告错误 + RT90和MD-9600支持",
 		"",
-		"I apologize to the many contributors whom I've missed.",
-		"If you've reported a fix, a bug or suggestion, let me",
-		"know and I'll add you to this list.",
+		"向被我遗漏的贡献者致歉。",
+		"如果你报告过修复、错误或建议，请告知我，",
+		"我会将你加入此列表。",
 		"Dale Farnsworth, NO7K, dale@farnsworth.org",
 	}
 
 	msg := strings.Join(msgs, "\n")
-	ui.InfoPopup("Thanks", msg)
+	ui.InfoPopup("致谢", msg)
 }
 
 type fillRecord func(*editor, *ui.HBox)
@@ -1363,30 +1363,30 @@ func addRecordSelector(box *ui.VBox, writable bool) {
 
 	if writable {
 		row.AddSpace(3)
-		add := row.AddButton("Add")
+		add := row.AddButton("添加")
 		add.ConnectClicked(func() {
 			err := rl.AddSelected()
 			if err != nil {
-				ui.ErrorPopup("Add Record", err.Error())
+				ui.ErrorPopup("添加记录", err.Error())
 				return
 			}
 		})
 
-		dup := row.AddButton("Dup")
+		dup := row.AddButton("复制")
 		dup.ConnectClicked(func() {
 			err := rl.DupSelected()
 			if err != nil {
-				ui.ErrorPopup("Dup Record", err.Error())
+				ui.ErrorPopup("复制记录", err.Error())
 				return
 			}
 		})
 
 		row.AddSpace(3)
-		delete := row.AddButton("Delete")
+		delete := row.AddButton("删除")
 		delete.ConnectClicked(func() {
 			err := rl.RemoveSelected()
 			if err != nil {
-				ui.ErrorPopup("Delete Record", err.Error())
+				ui.ErrorPopup("删除记录", err.Error())
 				return
 			}
 		})

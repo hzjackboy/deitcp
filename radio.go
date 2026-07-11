@@ -47,7 +47,7 @@ type modelURL struct {
 }
 
 func writeMD380toolsUsers() {
-	title := "Write user database to radio"
+	title := "写入用户数据库到对讲机"
 	text := `
 	The users database contains DMR ID numbers and callsigns of all registered
 	users. It can only be be written to radios that have been upgraded to the
@@ -67,9 +67,9 @@ func writeMD380toolsUsers() {
 	tmpFilename := filepath.Join(cacheDir, "users.tmp")
 
 	msgs := []string{
-		"Downloading user database from web sites...",
-		"Erasing the radio's user database...",
-		"Writing user database to radio...",
+		"正在从网站下载用户数据库...",
+		"正在擦除对讲机用户数据库...",
+		"正在写入用户数据库到对讲机...",
 	}
 	msgIndex := 0
 	if !download {
@@ -85,7 +85,7 @@ func writeMD380toolsUsers() {
 	if download {
 		db, err := userdb.New(userdb.CuratedUsers(), userdb.Abbreviate(true))
 		if err != nil {
-			title := fmt.Sprintf("Download of user database failed")
+			title := fmt.Sprintf("下载用户数据库失败")
 			ui.ErrorPopup(title, err.Error())
 			return
 		}
@@ -104,7 +104,7 @@ func writeMD380toolsUsers() {
 		if err != nil {
 			os.Remove(tmpFilename)
 			pd.Close()
-			title := fmt.Sprintf("Download of user database failed")
+			title := fmt.Sprintf("下载用户数据库失败")
 			ui.ErrorPopup(title, err.Error())
 			return
 		}
@@ -134,7 +134,7 @@ func writeMD380toolsUsers() {
 	}
 	if err != nil {
 		pd.Close()
-		title := fmt.Sprintf("write of user database failed: %s", err.Error())
+		title := fmt.Sprintf("写入用户数据库失败：%s", err.Error())
 		ui.ErrorPopup(title, err.Error())
 	}
 }
@@ -150,10 +150,10 @@ func writeExpandedUsers(title, text string) {
 	tmpFilename := filepath.Join(cacheDir, "users.tmp")
 
 	msgs := []string{
-		"Downloading user database from web sites...",
+		"正在从网站下载用户数据库...",
 		"Preparing to write user database to radio...",
-		"Erasing the radio's user database...",
-		"Writing user database to radio...",
+		"正在擦除对讲机用户数据库...",
+		"正在写入用户数据库到对讲机...",
 	}
 	msgIndex := 0
 	if !download {
@@ -169,7 +169,7 @@ func writeExpandedUsers(title, text string) {
 	if download {
 		db, err := userdb.New(userdb.CuratedUsers(), userdb.Abbreviate(false))
 		if err != nil {
-			title := fmt.Sprintf("Download of user database failed")
+			title := fmt.Sprintf("下载用户数据库失败")
 			ui.ErrorPopup(title, err.Error())
 			return
 		}
@@ -188,7 +188,7 @@ func writeExpandedUsers(title, text string) {
 		if err != nil {
 			os.Remove(tmpFilename)
 			pd.Close()
-			title := fmt.Sprintf("Download of user database failed")
+			title := fmt.Sprintf("下载用户数据库失败")
 			ui.ErrorPopup(title, err.Error())
 			return
 		}
@@ -220,13 +220,13 @@ func writeExpandedUsers(title, text string) {
 	}
 	if err != nil {
 		pd.Close()
-		title := fmt.Sprintf("write of user database failed: %s", err.Error())
+		title := fmt.Sprintf("写入用户数据库失败：%s", err.Error())
 		ui.ErrorPopup(title, err.Error())
 	}
 }
 
 func writeMD2017Users() {
-	title := "Write user database to radio"
+	title := "写入用户数据库到对讲机"
 	text := `
 	The users database contains DMR ID numbers and callsigns of all registered
 	users. It can only be be written to MD-2017 radios.
@@ -237,7 +237,7 @@ func writeMD2017Users() {
 }
 
 func writeUV380Users() {
-	title := "Write user database to radio"
+	title := "写入用户数据库到对讲机"
 	text := `
 	The users database contains DMR ID numbers and callsigns of all registered
 	users. It can only be be written to MD-UV380 radios.
@@ -250,7 +250,7 @@ func writeUV380Users() {
 func factoryFirmwareDialog(modelURLs []modelURL) {
 	model, url := modelURLs[0].model, modelURLs[0].url
 	if len(modelURLs) > 1 {
-		title := "Write factory firmware to radio..."
+		title := "写入出厂固件到对讲机..."
 		upgrade := false
 		var canceled bool
 		canceled, model, url = firmwareDialog(title, modelURLs, upgrade)
@@ -260,9 +260,9 @@ func factoryFirmwareDialog(modelURLs []modelURL) {
 	}
 
 	msgs := []string{
-		fmt.Sprintf("Downloading factory %s firmware...\n%s", model, url),
-		"Erasing the radio's firmware...",
-		fmt.Sprintf("Writing factory %s firmware to radio...", model),
+		fmt.Sprintf("正在下载%s出厂固件...\n%s", model, url),
+		"正在擦除对讲机固件...",
+		fmt.Sprintf("正在写入%s出厂固件到对讲机...", model),
 	}
 
 	writeFirmware(url, msgs)
@@ -271,9 +271,9 @@ func factoryFirmwareDialog(modelURLs []modelURL) {
 func (edt *editor) addRadioMenu(menu *ui.Menu) {
 	cp := edt.codeplug
 	mb := edt.mainWindow.MenuBar()
-	menu = mb.AddMenu("Radio")
+	menu = mb.AddMenu("对讲机")
 
-	menu.AddAction("Read codeplug from radio", func() {
+	menu.AddAction("从对讲机读取写频", func() {
 		// macOS 上要跳过 RadioExists()，因为它先打开 USB 设备调用 enterDfuMode，
 		// 会发送 detach 信号让对讲机重启进刷机模式（断开USB重连），
 		// 然后 Close() 关闭 libusb context。后续 ReadRadio 重新打开设备时
@@ -289,8 +289,8 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		cp := edt.codeplug
 
 		msgs := []string{
-			"Preparing to read codeplug from radio...",
-			"Reading codeplug from radio...",
+			"准备从对讲机读取写频...",
+			"正在从对讲机读取写频...",
 		}
 		msgIndex := 0
 		pd := ui.NewProgressDialog(msgs[msgIndex])
@@ -327,7 +327,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		edt.updateMenuBar()
 	})
 
-	menu.AddAction("Write codeplug to radio", func() {
+	menu.AddAction("写入写频到对讲机", func() {
 		valid := cp.Valid()
 		edt.updateMenuBar()
 		if !valid {
@@ -338,14 +338,14 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 
 	Or, click on Ignore to continue writing to the radio.`
 			msg := fmt.Sprintf(fmtStr, len(cp.Warnings()))
-			title := "write warning"
+			title := "写入警告"
 			rv := ui.WarningPopup(title, msg)
 			if rv != ui.PopupIgnore {
 				return
 			}
 		}
 
-		title := "Write codeplug to radio"
+		title := "写入写频到对讲机"
 		model := codeplug.ModelTypes(cp.Model())
 		freq := cp.FrequencyRange()
 		warn := `
@@ -360,9 +360,9 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		}
 
 		msgs := []string{
-			"Preparing to write codeplug to radio...",
-			"Erasing the radio's codeplug...",
-			"Writing codeplug to radio...",
+			"准备写入写频到对讲机...",
+			"正在擦除对讲机写频...",
+			"正在写入写频到对讲机...",
 		}
 		msgIndex := 0
 
@@ -381,16 +381,16 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		})
 		if err != nil {
 			pd.Close()
-			title := "Write codeplug to radio failed"
+			title := "写入写频到对讲机失败"
 			ui.ErrorPopup(title, err.Error())
 		}
 	}).SetEnabled(cp != nil && cp.Loaded())
 
 	menu.AddSeparator()
 
-	fwMenu := menu.AddMenu("Write factory firmware to radio...")
+	fwMenu := menu.AddMenu("写入出厂固件到对讲机...")
 
-	fwMenu.AddAction("Write MD-380 factory firmware...", func() {
+	fwMenu.AddAction("写入MD-380出厂固件..."), func() {
 		dir := "https://farnsworth.org/dale/dmr/factory_firmware/md380/"
 
 		modelURLs := []modelURL{
@@ -405,7 +405,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		factoryFirmwareDialog(modelURLs)
 	})
 
-	fwMenu.AddAction("Write MD-390 factory firmware...", func() {
+	fwMenu.AddAction("写入MD-390出厂固件..."), func() {
 		dir := "https://farnsworth.org/dale/dmr/factory_firmware/md390/"
 
 		modelURLs := []modelURL{
@@ -416,7 +416,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		factoryFirmwareDialog(modelURLs)
 	})
 
-	fwMenu.AddAction("Write RT3 factory firmware", func() {
+	fwMenu.AddAction("写入RT3出厂固件", func() {
 		dir := "https://farnsworth.org/dale/dmr/factory_firmware/rt3/"
 
 		modelURLs := []modelURL{
@@ -426,7 +426,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		factoryFirmwareDialog(modelURLs)
 	})
 
-	fwMenu.AddAction("Write RT8 factory firmware", func() {
+	fwMenu.AddAction("写入RT8出厂固件", func() {
 		dir := "https://farnsworth.org/dale/dmr/factory_firmware/rt8/"
 
 		modelURLs := []modelURL{
@@ -461,11 +461,11 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 	*/
 
 	menu.AddSeparator()
-	writeUsersMenu := menu.AddMenu("Write user database to radio...")
+	writeUsersMenu := menu.AddMenu("写入用户数据库到对讲机...")
 
 	writeUsersMenu.AddAction("Write md380tools user database to radio...", writeMD380toolsUsers)
-	writeUsersMenu.AddAction("Write MD2017 user database to radio...", writeMD2017Users)
-	writeUsersMenu.AddAction("Write MD-UV380 user database to radio...", writeUV380Users)
+	writeUsersMenu.AddAction("写入MD2017用户数据库到对讲机..."), writeMD2017Users)
+	writeUsersMenu.AddAction("写入MD-UV380用户数据库到对讲机..."), writeUV380Users)
 
 	menu.AddSeparator()
 
@@ -473,7 +473,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 
 	md380toolsMenu.AddAction("Write user database to radio...", writeMD380toolsUsers)
 
-	md380toolsMenu.AddAction("Write md380tools firmware to radio...", func() {
+	md380toolsMenu.AddAction("写入md380tools固件到对讲机...", func() {
 		path := "https://farnsworth.org/dale/md380tools/firmware/"
 		nonGpsURL := path + "D13.20.bin"
 		gpsURL := path + "S13.20.bin"
@@ -487,7 +487,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 			modelURL{"RT8 (S13.20)", gpsURL},
 		}
 
-		title := "Write md380tools firmware to radio..."
+		title := "写入md380tools固件到对讲机..."
 		upgrade := true
 		canceled, model, url := firmwareDialog(title, modelURLs, upgrade)
 		if canceled {
@@ -495,14 +495,14 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		}
 
 		msgs := []string{
-			fmt.Sprintf("Downloading md380tools %s firmware...\n%s", model, url),
-			"Erasing the radio's firmware...",
-			fmt.Sprintf("Writing md380tools %s firmware to radio...", model),
+			fmt.Sprintf("正在下载md380tools %s固件...\n%s", model, url),
+			"正在擦除对讲机固件...",
+			fmt.Sprintf("正在写入md380tools %s固件到对讲机...", model),
 		}
 
 		writeFirmware(url, msgs)
 	})
-	md380toolsMenu.AddAction("Write KD4Z md380tools firmware to radio...", func() {
+	md380toolsMenu.AddAction("写入KD4Z md380tools固件到对讲机...", func() {
 		path := "https://farnsworth.org/dale/md380tools/kd4z/"
 		nonGpsURL := path + "firmware-noGPS.bin"
 		gpsURL := path + "firmware-GPS.bin"
@@ -516,7 +516,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 			modelURL{"RT8 (S13.20)", gpsURL},
 		}
 
-		title := "Write KD4Z md380tools firmware to radio..."
+		title := "写入KD4Z md380tools固件到对讲机..."
 		upgrade := true
 		canceled, model, url := firmwareDialog(title, modelURLs, upgrade)
 		if canceled {
@@ -524,8 +524,8 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		}
 
 		msgs := []string{
-			fmt.Sprintf("Downloading KD4Z md380tools %s firmware...\n%s", model, url),
-			"Erasing the radio's firmware...",
+			fmt.Sprintf("正在下载KD4Z md380tools %s固件...\n%s", model, url),
+			"正在擦除对讲机固件...",
 			fmt.Sprintf("Writing KD4Z md380tools %s firmware to radio...", model),
 		}
 
@@ -536,7 +536,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 func writeFirmware(url string, msgs []string) {
 	tmpFile, err := ioutil.TempFile("", "editcp")
 	if err != nil {
-		title := fmt.Sprintf("temporary file failed: %s", err.Error())
+		title := fmt.Sprintf("临时文件创建失败：%s", err.Error())
 		ui.ErrorPopup(title, err.Error())
 		return
 	}
@@ -562,7 +562,7 @@ func writeFirmware(url string, msgs []string) {
 	})
 	if err != nil {
 		pd.Close()
-		title := "firmware write failed"
+		title := "固件写入失败"
 		ui.ErrorPopup(title, err.Error())
 		return
 	}
@@ -582,7 +582,7 @@ func writeFirmware(url string, msgs []string) {
 	})
 	if err != nil {
 		pd.Close()
-		title := "firmware write failed"
+		title := "固件写入失败"
 		ui.ErrorPopup(title, err.Error())
 		return
 	}
@@ -602,8 +602,8 @@ func writeFirmware(url string, msgs []string) {
 		return
 	}
 
-	msg := "Turn radio off and back on again."
-	ui.InfoPopup("Firmware write complete", msg)
+	msg := "关闭对讲机后重新开机。"
+	ui.InfoPopup("固件写入完成", msg)
 }
 
 func userdbFilename() string {
@@ -638,9 +638,9 @@ func userdbDialog(title string, labelText string) (canceled, download bool) {
 	dialog.AddLabel(labelText[1:])
 
 	form := dialog.AddForm()
-	form.AddRow("Download new users database file", downloadCheckbox)
+	form.AddRow("下载新的用户数据库文件", downloadCheckbox)
 
-	dialog.AddLabel("Filename:")
+	dialog.AddLabel("文件名：")
 	dialog.AddExistingHbox(filenameBox)
 
 	row := dialog.AddHbox()
@@ -649,7 +649,7 @@ func userdbDialog(title string, labelText string) (canceled, download bool) {
 	})
 	row.AddWidget(cancelButton)
 
-	saveButton := ui.NewButtonWidget("Write", func() {
+	saveButton := ui.NewButtonWidget("写入", func() {
 		dialog.Accept()
 	})
 	row.AddWidget(saveButton)
@@ -700,9 +700,9 @@ func firmwareDialog(title string, modelURLs []modelURL, upgrade bool) (canceled 
 
 	dialog.AddLabel(labelText[1:])
 
-	groupBox := dialog.AddGroupbox("Select Radio Model")
+	groupBox := dialog.AddGroupbox("选择对讲机型号")
 	form := groupBox.AddForm()
-	form.AddRow("Radio model", modelCombobox)
+	form.AddRow("对讲机型号", modelCombobox)
 
 	row := dialog.AddHbox()
 
@@ -711,7 +711,7 @@ func firmwareDialog(title string, modelURLs []modelURL, upgrade bool) (canceled 
 	})
 	row.AddWidget(cancelButton)
 
-	saveButton := ui.NewButtonWidget("Update Firmware", func() {
+	saveButton := ui.NewButtonWidget("更新固件", func() {
 		dialog.Accept()
 	})
 	row.AddWidget(saveButton)

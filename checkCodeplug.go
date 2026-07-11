@@ -31,11 +31,11 @@ import (
 
 func errorText(edt *editor) string {
 	cp := edt.codeplug
-	status := "No errors found"
+	status := "未发现错误"
 	errMsg := ""
 
 	if !cp.Valid() {
-		status = "The following field values are invalid:"
+		status = "以下字段值无效："
 		errMsg = strings.Join(cp.Warnings(), "\n")
 	}
 	edt.updateMenuBar()
@@ -46,13 +46,13 @@ func errorText(edt *editor) string {
 func checkCodeplug(edt *editor) {
 	w := edt.mainWindow.NewWindow()
 	cp := edt.codeplug
-	w.SetTitle(cp.Filename() + edt.titleSuffix() + " Invalid Fields")
+	w.SetTitle(cp.Filename() + edt.titleSuffix() + " 无效字段")
 
 	windowBox := w.AddVbox()
 
 	var t *ui.TextEdit
 
-	b := windowBox.AddButton("Re-scan for invalid values")
+	b := windowBox.AddButton("重新扫描无效值")
 	b.ConnectClicked(func() {
 		t.SetPlainText(errorText(edt))
 	})

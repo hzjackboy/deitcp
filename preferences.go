@@ -28,12 +28,12 @@ import (
 )
 
 func (edt *editor) preferences() {
-	dialog := ui.NewDialog("Preferences")
+	dialog := ui.NewDialog("偏好设置")
 
 	loadSettings()
 
 	row := dialog.AddHbox()
-	groupBox := row.AddGroupbox("Options")
+	groupBox := row.AddGroupbox("选项")
 	form := groupBox.AddForm()
 
 	editButtonsEnabled := settings.editButtonsEnabled
@@ -41,28 +41,28 @@ func (edt *editor) preferences() {
 	checkbox := ui.NewCheckboxWidget(checked, func(checked bool) {
 		editButtonsEnabled = checked
 	})
-	form.AddRow("Enable edit buttons on main window:", checkbox)
+	form.AddRow("在主窗口启用编辑按钮：", checkbox)
 
 	gpsEnabled := settings.gpsEnabled
 	checked = gpsEnabled
 	checkbox = ui.NewCheckboxWidget(checked, func(checked bool) {
 		gpsEnabled = checked
 	})
-	form.AddRow("Display GPS fields:", checkbox)
+	form.AddRow("显示 GPS 字段：", checkbox)
 
 	uniqueContactNames := settings.uniqueContactNames
 	checked = uniqueContactNames
 	checkbox = ui.NewCheckboxWidget(checked, func(checked bool) {
 		uniqueContactNames = checked
 	})
-	form.AddRow("Require Contact names to be unique:", checkbox)
+	form.AddRow("要求联系人名称唯一：", checkbox)
 
 	autosaveInterval := settings.autosaveInterval
 
 	spinbox := ui.NewSpinboxWidget(autosaveInterval, 0, 60, func(i int) {
 		autosaveInterval = i
 	})
-	form.AddRow("Auto Save interval (minutes):", spinbox)
+	form.AddRow("自动保存间隔(分钟)：", spinbox)
 
 	var experimental bool
 	if needExperimental {
@@ -71,7 +71,7 @@ func (edt *editor) preferences() {
 		checkbox = ui.NewCheckboxWidget(checked, func(checked bool) {
 			experimental = checked
 		})
-		form.AddRow("Enable experimental features:", checkbox)
+		form.AddRow("启用实验性功能：", checkbox)
 	}
 
 	dialog.AddSpace(2)
@@ -83,7 +83,7 @@ func (edt *editor) preferences() {
 	})
 	row.AddWidget(cancelButton)
 
-	okButton := ui.NewButtonWidget("Save", func() {
+	okButton := ui.NewButtonWidget("保存", func() {
 		dialog.Accept()
 	})
 	row.AddWidget(okButton)
