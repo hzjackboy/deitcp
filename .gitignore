@@ -1,0 +1,28 @@
+# 编译产物
+build/
+deploy/
+vendor/
+
+# macOS 系统文件
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Go 缓存
+*.out
+*.test
+*.test.exe
+
+# 临时文件
+*.autosave
+*.backup
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# 本地配置
+local_ui/
+qt-src/

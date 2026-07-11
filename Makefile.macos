@@ -1,0 +1,113 @@
+#===============================================================================
+# editcp macOS Makefile
+# 用法：
+#   make -f Makefile.macos build     # 构建 editcp
+#   make -f Makefile.macos run       # 运行 editcp
+#   make -f Makefile.macos clean     # 清理构建产物
+#===============================================================================
+
+BUILD_DIR := build/macos
+APP_BUNDLE := $(BUILD_DIR)/editcp.app
+BINARY := $(BUILD_DIR)/editcp
+VERSION := $(shell sed -n '/version =/{s/^[^"]*"//;s/".*//p;q}' version.go 2>/dev/null || echo "1.0.31")
+
+# Qt 5 路径（Homebrew）
+QT_PATH := $(shell brew --prefix qt@5 2>/dev/null || echo "/usr/local/opt/qt@5")
+PKG_CONFIG_PATH := $(QT_PATH)/lib/pkgconfig
+
+# CGo 标志
+CGO_CPPFLAGS := -I$(QT_PATH)/include -F$(QT_PATH)/lib
+CGO_LDFLAGS := -F$(QT_PATH)/lib
+
+# 检测架构
+ARCH := $(shell uname -m)
+
+.PHONY: build clean run info
+
+default: build
+
+#----------------------------------------------------------------------
+# 构建
+#----------------------------------------------------------------------
+build: check-deps
+	@echo "=========================================="
+	@echo "  editcp macOS 构建 (v$(VERSION))"
+	@echo "  架构: $(ARCH)"
+	@echo "=========================================="
+	@mkdir -p $(BUILD_DIR)
+	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) \
+	CGO_CPPFLAGS='$(CGO_CPPFLAGS)' \
+	CGO_LDFLAGS='$(CGO_LDFLAGS)' \
+	go build -ldflags="-s -w" -o $(BINARY) .
+	@echo "  ✓ 构建完成: $(BINARY)"
+	$(MAKE) bundle
+
+#----------------------------------------------------------------------
+# 创建 app bundle
+#----------------------------------------------------------------------
+bundle: $(BINARY)
+	@echo "  创建 app bundle..."
+	@mkdir -p $(APP_BUNDLE)/Contents/MacOS
+	@mkdir -p $(APP_BUNDLE)/Contents/Resources
+	@cp $(BINARY) $(APP_BUNDLE)/Contents/MacOS/editcp
+	@cat > $(APP_BUNDLE)/Contents/Info.plist <<-'PLIST'
+	<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+	<plist version="1.0">
+	<dict>
+	    <key>CFBundleExecutable</key>
+	    <string>editcp</string>
+	    <key>CFBundleIdentifier</key>
+	    <string>org.farnsworth.editcp</string>
+	    <key>CFBundleName</key>
+	    <string>Codeplug Editor</string>
+	    <key>CFBundleDisplayName</key>
+	    <string>editcp</string>
+	    <key>CFBundleVersion</key>
+	    <string>$(VERSION)</string>
+	    <key>CFBundleShortVersionString</key>
+	    <string>$(VERSION)</string>
+	    <key>CFBundlePackageType</key>
+	    <string>APPL</string>
+	    <key>LSMinimumSystemVersion</key>
+	    <string>11.0</string>
+	    <key>NSHighResolutionCapable</key>
+	    <true/>
+	    <key>NSHumanReadableCopyright</key>
+	    <string>Copyright 2017-2021 Dale Farnsworth. GPL v3.</string>
+	</dict>
+	</plist>
+	PLIST
+	@chmod +x $(APP_BUNDLE)/Contents/MacOS/editcp
+	@echo "  ✓ app bundle: $(APP_BUNDLE)"
+
+#----------------------------------------------------------------------
+# 运行
+#----------------------------------------------------------------------
+run: build
+	@echo "  启动 editcp..."
+	@$(APP_BUNDLE)/Contents/MacOS/editcp $(ARGS)
+
+#----------------------------------------------------------------------
+# 清理
+#----------------------------------------------------------------------
+clean:
+	@rm -rf $(BUILD_DIR) deploy/darwin
+	@echo "  ✓ 已清理构建产物"
+
+#----------------------------------------------------------------------
+# 环境信息
+#----------------------------------------------------------------------
+info:
+	@echo "editcp macOS 构建信息:"
+	@echo "  版本: $(VERSION)"
+	@echo "  架构: $(ARCH)"
+	@echo "  Go: $(shell go version 2>/dev/null || echo '未安装')"
+	@echo "  Qt: $(shell command -v qmake 2>/dev/null && qmake --version 2>&1 || echo '未安装')"
+	@echo "  PKG_CONFIG_PATH: $(PKG_CONFIG_PATH)"
+
+check-deps:
+	@command -v go >/dev/null 2>&1 || { echo "错误: 需要安装 Go"; exit 1; }
+	@command -v pkg-config >/dev/null 2>&1 || { echo "错误: 需要安装 pkg-config"; exit 1; }
+	@test -f "$(QT_PATH)/lib/pkgconfig/Qt5Core.pc" || { echo "错误: 需要安装 Qt 5"; exit 1; }
+	@echo "  ✓ 依赖检查通过"
