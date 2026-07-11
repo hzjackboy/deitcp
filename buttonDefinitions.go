@@ -70,7 +70,7 @@ func bdRecord(edt *editor, recordBox *ui.HBox) {
 	column1 := mainRow.AddVbox()
 	column1.SetFixedWidth()
 
-	groupBox := column1.AddGroupbox("Radio Buttons")
+	groupBox := column1.AddGroupbox("对讲机按键")
 	form = groupBox.AddForm()
 
 	column1.AddFiller()
@@ -93,7 +93,7 @@ func bdRecord(edt *editor, recordBox *ui.HBox) {
 	column = row.AddVbox()
 	row.AddFiller()
 	column.SetFixedWidth()
-	groupBox = column.AddGroupbox("One Touch Access")
+	groupBox = column.AddGroupbox("一键通")
 	table := groupBox.AddTable()
 	w := edt.recordWindow(r.Type())
 	records = w.Records(codeplug.RtOneTouch)
@@ -116,8 +116,8 @@ func bdRecord(edt *editor, recordBox *ui.HBox) {
 	labels = []string{
 		r.Field(codeplug.FtOtMode).TypeName(),
 		r.Field(codeplug.FtOtCall).TypeName(),
-		"Call Type",
-		"Message/Encode",
+		"呼叫类型",
+		"消息/编码",
 	}
 	table.AddTopLabels(labels)
 
@@ -130,7 +130,7 @@ func bdRecord(edt *editor, recordBox *ui.HBox) {
 	column.SetFixedWidth()
 	row.AddFiller()
 
-	groupBox = column.AddGroupbox("Number Key Quick Contact Access")
+	groupBox = column.AddGroupbox("数字键快速联系人")
 	table = groupBox.AddTable()
 	records = w.Records(codeplug.RtNumberKey)
 	labels = make([]string, 0)
@@ -139,7 +139,7 @@ func bdRecord(edt *editor, recordBox *ui.HBox) {
 		table.AddRow(
 			fieldTypeWidget(w, r, codeplug.FtNkContact),
 		)
-		labels = append(labels, fmt.Sprintf(" Number key %d", r.Index()))
+		labels = append(labels, fmt.Sprintf(" 数字键 %d", r.Index()))
 	}
 
 	table.AddLeftLabels(labels)
