@@ -36,6 +36,7 @@ import (
 	l "github.com/dalefarnsworth-dmr/debug"
 	"github.com/dalefarnsworth-dmr/ui"
 	"github.com/therecipe/qt/core"
+	"deitcp/lang"
 )
 
 // This turns on the experimental checkbox in preferences
