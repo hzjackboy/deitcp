@@ -928,11 +928,21 @@ func (edt *editor) updateMenuBar() {
 	langMenu := menu.AddMenu(lang.T("语言", "Language"))
 	langMenu.AddAction(lang.T("中文", "Chinese"), func() {
 		lang.SetLang(lang.ZH)
+			codeplug.SetFieldLang(true)
+			codeplug.SetRecordLang(true)
+			for _, w := range edt.mainWindow.RecordWindows() {
+				w.Close()
+			}
 		edt.updateMenuBar()
 		edt.updateButtons()
 	})
 	langMenu.AddAction(lang.T("英文", "English"), func() {
 		lang.SetLang(lang.EN)
+			codeplug.SetFieldLang(false)
+			codeplug.SetRecordLang(false)
+			for _, w := range edt.mainWindow.RecordWindows() {
+				w.Close()
+			}
 		edt.updateMenuBar()
 		edt.updateButtons()
 	})
