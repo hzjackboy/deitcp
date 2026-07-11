@@ -336,12 +336,9 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 					if progressShown && pd != nil {
 						pd.Close()
 					}
-					ui.ErrorPopup("USB通信错误",
-						"写入写频数据时发生内部错误。\n"+
-							"请确认：\n"+
-							"1. 对讲机已进入刷机模式（开机时按住PTT+PTT上方按键）\n"+
-							"2. 写频线连接正常\n"+
-							"3. 系统设置 > 隐私与安全性 > USB 配件 中已允许连接")
+					fmt.Fprintf(os.Stderr, "写入写频 panic: %v\n", r)
+					errDetail := fmt.Sprintf("错误详情: %v\n\n请确认：\n1. 对讲机已进入刷机模式（开机时按住PTT+PTT上方按键）\n2. 写频线连接正常\n3. 系统设置 > 隐私与安全性 > USB 配件 中已允许连接", r)
+					ui.ErrorPopup("USB通信错误", "写入写频数据时发生内部错误。\n"+errDetail)
 				}
 			}()
 			valid := cp.Valid()
