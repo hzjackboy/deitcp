@@ -1228,12 +1228,11 @@ func (edt *editor) exportJSON() {
 }
 
 func about() {
-	msg := fmt.Sprintf("editcp Version %s\n", version)
+	msg := fmt.Sprintf("editcp 版本 %s\n", version)
 	msg += `
-editcp is free software licensed
-under version 3 of the GPL.
+editcp 是自由软件，采用 GPL v3 协议授权。
 
-Copyright 2017-2021 Dale Farnsworth.  All rights reserved.
+版权所有 2017-2021 Dale Farnsworth。保留所有权利。
 
 Dale Farnsworth
 1007 W Mendoza Ave
@@ -1242,8 +1241,11 @@ USA
 
 dale@farnsworth.org
 
-The source code for editcp may be found at
+editcp 的源代码可在以下地址获取：
 https://github.com/dalefarnsworth-dmr/editcp
+
+macOS 移植 & 汉化：hzjackboy
+https://github.com/hzjackboy/deitcp
 `
 	ui.InfoPopup("关于 editcp", msg)
 }
