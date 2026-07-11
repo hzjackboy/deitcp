@@ -134,7 +134,7 @@ func writeMD380toolsUsers() {
 	}
 	if err != nil {
 		pd.Close()
-		title := fmt.Sprintf("写入用户数据库失败：%s", err.Error())
+		title := fmt.Sprintf("write of user database failed: %s", err.Error())
 		ui.ErrorPopup(title, err.Error())
 	}
 }
@@ -220,7 +220,7 @@ func writeExpandedUsers(title, text string) {
 	}
 	if err != nil {
 		pd.Close()
-		title := fmt.Sprintf("写入用户数据库失败：%s", err.Error())
+		title := fmt.Sprintf("write of user database failed: %s", err.Error())
 		ui.ErrorPopup(title, err.Error())
 	}
 }
@@ -390,7 +390,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 
 	fwMenu := menu.AddMenu("写入出厂固件到对讲机...")
 
-	fwMenu.AddAction("写入MD-380出厂固件..."), func() {
+	fwMenu.AddAction("写入MD-380出厂固件...", func() {
 		dir := "https://farnsworth.org/dale/dmr/factory_firmware/md380/"
 
 		modelURLs := []modelURL{
@@ -405,7 +405,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		factoryFirmwareDialog(modelURLs)
 	})
 
-	fwMenu.AddAction("写入MD-390出厂固件..."), func() {
+	fwMenu.AddAction("写入MD-390出厂固件...", func() {
 		dir := "https://farnsworth.org/dale/dmr/factory_firmware/md390/"
 
 		modelURLs := []modelURL{
@@ -463,15 +463,15 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 	menu.AddSeparator()
 	writeUsersMenu := menu.AddMenu("写入用户数据库到对讲机...")
 
-	writeUsersMenu.AddAction("Write md380tools user database to radio...", writeMD380toolsUsers)
-	writeUsersMenu.AddAction("写入MD2017用户数据库到对讲机..."), writeMD2017Users)
-	writeUsersMenu.AddAction("写入MD-UV380用户数据库到对讲机..."), writeUV380Users)
+	writeUsersMenu.AddAction("写入md380tools用户数据库到对讲机...", writeMD380toolsUsers)
+	writeUsersMenu.AddAction("写入MD2017用户数据库到对讲机...", writeMD2017Users)
+	writeUsersMenu.AddAction("写入MD-UV380用户数据库到对讲机...", writeUV380Users)
 
 	menu.AddSeparator()
 
 	md380toolsMenu := menu.AddMenu("md380tools...")
 
-	md380toolsMenu.AddAction("Write user database to radio...", writeMD380toolsUsers)
+	md380toolsMenu.AddAction("写入用户数据库到对讲机...", writeMD380toolsUsers)
 
 	md380toolsMenu.AddAction("写入md380tools固件到对讲机...", func() {
 		path := "https://farnsworth.org/dale/md380tools/firmware/"
@@ -536,7 +536,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 func writeFirmware(url string, msgs []string) {
 	tmpFile, err := ioutil.TempFile("", "editcp")
 	if err != nil {
-		title := fmt.Sprintf("临时文件创建失败：%s", err.Error())
+		title := fmt.Sprintf("temporary file failed: %s", err.Error())
 		ui.ErrorPopup(title, err.Error())
 		return
 	}
@@ -644,7 +644,7 @@ func userdbDialog(title string, labelText string) (canceled, download bool) {
 	dialog.AddExistingHbox(filenameBox)
 
 	row := dialog.AddHbox()
-	cancelButton := ui.NewButtonWidget("Cancel", func() {
+	cancelButton := ui.NewButtonWidget("取消", func() {
 		dialog.Reject()
 	})
 	row.AddWidget(cancelButton)
@@ -706,7 +706,7 @@ func firmwareDialog(title string, modelURLs []modelURL, upgrade bool) (canceled 
 
 	row := dialog.AddHbox()
 
-	cancelButton := ui.NewButtonWidget("Cancel", func() {
+	cancelButton := ui.NewButtonWidget("取消", func() {
 		dialog.Reject()
 	})
 	row.AddWidget(cancelButton)

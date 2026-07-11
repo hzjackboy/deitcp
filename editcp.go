@@ -94,8 +94,8 @@ func checkAutosave(filename string) {
 
 	backupFilename := filename + ".backup"
 	title := "发现自动保存文件"
-	msg := "文件 %s 存在自动保存的备份。\n" +
-		"是否从备份中恢复该文件？"
+	msg := "自动保存的备份 %s 已存在。 " +
+		"要从此备份中恢复文件吗？"
 	msg = fmt.Sprintf(msg, filename)
 	switch ui.YesNoPopup(title, msg) {
 	case ui.PopupYes:
@@ -114,8 +114,8 @@ func (edt *editor) revertFile() error {
 
 	cp := edt.codeplug
 	if cp.Changed() {
-		title := fmt.Sprintf("还原 %s", cp.Filename())
-		msg := cp.Filename() + " 已被修改。\n"
+		title := fmt.Sprintf("Revert %s", cp.Filename())
+		msg := cp.Filename() + " has been modified.\n"
 		msg += "确定要放弃更改吗？"
 		switch ui.YesNoPopup(title, msg) {
 		case ui.PopupYes:
@@ -245,7 +245,7 @@ func displayPreviousPanic(text string) {
 
 	mw := ui.NewMainWindow()
 	mw.Resize(600, 400)
-	mw.SetTitle("上一次崩溃信息")
+	mw.SetTitle("上次崩溃信息")
 	mw.ConnectClose(func() bool {
 		if removeFile {
 			l.RemovePreviousPanicFile()
@@ -303,7 +303,7 @@ func main() {
 		return
 	}
 	app.SetOrganizationName("codeplug")
-	app.SetApplicationName("Codeplug Editor")
+	app.SetApplicationName("写频编辑器")
 	appSettings = app.NewSettings()
 	loadSettings()
 
@@ -703,7 +703,7 @@ func newEditor(app *ui.App, fType codeplug.FileType, filename string) *editor {
 
 			if count == 1 && cp.Changed() {
 				title := fmt.Sprintf("保存 %s", cp.Filename())
-				msg := cp.Filename() + " 已被修改。\n"
+				msg := cp.Filename() + " has been modified.\n"
 				msg += "是否保存更改？"
 				switch ui.SavePopup(title, msg) {
 				case ui.PopupSave:
@@ -786,34 +786,34 @@ func (edt *editor) updateMenuBar() {
 	menu.AddSeparator()
 
 	importMenu := menu.AddMenu("导入...")
-	importMenu.AddAction("导入文本文件..."...unc() {
+	importMenu.AddAction("导入文本文件...", func() {
 		edt.importText()
 	})
 
-	importMenu.AddAction("导入表格文件..."), func() {
+	importMenu.AddAction("导入表格文件...", func() {
 		edt.importXLSX()
 	})
 
-	importMenu.AddAction("导入JSON文件..."), func() {
+	importMenu.AddAction("导入JSON文件...", func() {
 		edt.importJSON()
 	})
 
 	exportMenu := menu.AddMenu("导出...")
 	exportMenu.SetEnabled(cp != nil)
 
-	exportMenu.AddAction("导出为文本..."), func() {
+	exportMenu.AddAction("导出为文本...", func() {
 		edt.exportText()
 	})
 
-	exportMenu.AddAction("导出为文本(每条记录一行)..."), func() {
+	exportMenu.AddAction("导出为文本(每条记录一行)...", func() {
 		edt.exportTextOneLineRecords()
 	})
 
-	exportMenu.AddAction("导出为表格..."), func() {
+	exportMenu.AddAction("导出为表格...", func() {
 		edt.exportXLSX()
 	})
 
-	exportMenu.AddAction("导出为JSON..."), func() {
+	exportMenu.AddAction("导出为JSON...", func() {
 		edt.exportJSON()
 	})
 
@@ -1251,20 +1251,20 @@ https://github.com/dalefarnsworth-dmr/editcp
 func thanks() {
 	msgs := []string{
 		"衷心感谢以下人士：",
-		"  José Melo, CT4TX - 制作精美标志",
-		"  Ron McMurdy, W5QLD - 报告错误",
-		"  Markus Lenggenhager, HB9BRJ - 报告错误",
-		"  Roy G. Jackson, KW4G - 报告错误",
-		"  Kevin Otte, N8VNR - 报告错误",
-		"  Andreas Krüger, DJ3EI - 报告错误",
-		"  Martin Jones, KI0KO - 报告错误",
-		"  Marco Carrara, IW2KWD - 改进建议",
-		"  Bob Finch, W9YA - 报告错误",
-		"  Tyler Tidman, VA3DGN - 报告错误 + RT90和MD-9600支持",
+		"  José Melo, CT4TX, for creating the nice logo",
+		"  Ron McMurdy, W5QLD, for reporting bugs",
+		"  Markus Lenggenhager, HB9BRJ, for reporting bugs",
+		"  Roy G. Jackson, KW4G, for reporting bugs",
+		"  Kevin Otte, N8VNR, for reporting bugs",
+		"  Andreas Krüger, DJ3EI, for reporting bugs",
+		"  Martin Jones, KI0KO, for reporting bugs",
+		"  Marco Carrara, IW2KWD, for suggesting improvements",
+		"  Bob Finch, W9YA, for reporting bugs",
+		"  Tyler Tidman, VA3DGN, for reporting bugs + RT90 & MD-9600 support",
 		"",
-		"向被我遗漏的贡献者致歉。",
-		"如果你报告过修复、错误或建议，请告知我，",
-		"我会将你加入此列表。",
+		"I apologize to the many contributors whom I've missed.",
+		"If you've reported a fix, a bug or suggestion, let me",
+		"know and I'll add you to this list.",
 		"Dale Farnsworth, NO7K, dale@farnsworth.org",
 	}
 
