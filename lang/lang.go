@@ -1,0 +1,42 @@
+// Package lang 提供中英文界面切换功能
+package lang
+
+import "sync"
+
+var (
+	mu          sync.RWMutex
+	currentLang = ZH // 默认中文
+)
+
+// Lang 语言类型
+type Lang int
+
+const (
+	ZH Lang = iota // 中文
+	EN             // 英文
+)
+
+// SetLang 设置当前语言
+func SetLang(l Lang) {
+	mu.Lock()
+	defer mu.Unlock()
+	currentLang = l
+}
+
+// GetLang 获取当前语言
+func GetLang() Lang {
+	mu.RLock()
+	defer mu.RUnlock()
+	return currentLang
+}
+
+// T 根据当前语言返回对应文本
+// zh: 中文文本, en: 英文文本
+func T(zh, en string) string {
+	mu.RLock()
+	defer mu.RUnlock()
+	if currentLang == EN {
+		return en
+	}
+	return zh
+}
