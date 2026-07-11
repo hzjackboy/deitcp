@@ -25,6 +25,7 @@ package main
 
 import (
 	"github.com/dalefarnsworth-dmr/codeplug"
+	"github.com/dalefarnsworth-dmr/editcp/lang"
 	"github.com/dalefarnsworth-dmr/ui"
 )
 
@@ -41,7 +42,7 @@ func glRecord(edt *editor, recordBox *ui.HBox) {
 	form := row.AddForm()
 	form.AddFieldTypeRows(r, codeplug.FtGlName)
 
-	row = column.AddHbox().AddGroupbox("Contacts").AddHbox()
+	row = column.AddHbox().AddGroupbox(lang.T("联系人", "Contacts")).AddHbox()
 
 	row.AddFieldMembers(r,
 		codeplug.FtGlContact,

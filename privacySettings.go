@@ -27,6 +27,7 @@ import (
 	"fmt"
 
 	"github.com/dalefarnsworth-dmr/codeplug"
+	"github.com/dalefarnsworth-dmr/editcp/lang"
 	"github.com/dalefarnsworth-dmr/ui"
 )
 
@@ -45,14 +46,14 @@ func psRecord(edt *editor, recordBox *ui.HBox) {
 	row := mainBox.AddHbox()
 
 	column := row.AddVbox()
-	groupBox := column.AddGroupbox("Key Value (Basic)")
+	groupBox := column.AddGroupbox(lang.T("按键功能(基本)", "Key Value (Basic)"))
 	form := groupBox.AddForm()
 	form.AddFieldRows(labelFunc, r.Fields(codeplug.FtPsBasicKey)...)
 
 	row.AddSpace(3)
 
 	column = row.AddVbox()
-	groupBox = column.AddGroupbox("Key Value (Enhanced)")
+	groupBox = column.AddGroupbox(lang.T("按键功能(增强)", "Key Value (Enhanced)"))
 	form = groupBox.AddForm()
 	form.AddFieldRows(labelFunc, r.Fields(codeplug.FtPsEnhancedKey)...)
 	column.AddFiller()

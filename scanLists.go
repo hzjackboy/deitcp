@@ -25,6 +25,7 @@ package main
 
 import (
 	"github.com/dalefarnsworth-dmr/codeplug"
+	"github.com/dalefarnsworth-dmr/editcp/lang"
 	"github.com/dalefarnsworth-dmr/ui"
 )
 
@@ -41,7 +42,7 @@ func slRecord(edt *editor, recordBox *ui.HBox) {
 	form := row.AddForm()
 	form.AddFieldTypeRows(r, codeplug.FtSlName)
 
-	row = column.AddHbox().AddGroupbox("Channels").AddHbox()
+	row = column.AddHbox().AddGroupbox(lang.T("信道", "Channels")).AddHbox()
 
 	row.AddFieldMembers(r,
 		codeplug.FtSlChannel_md380,

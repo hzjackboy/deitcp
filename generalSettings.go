@@ -25,6 +25,7 @@ package main
 
 import (
 	"github.com/dalefarnsworth-dmr/codeplug"
+	"github.com/dalefarnsworth-dmr/editcp/lang"
 	"github.com/dalefarnsworth-dmr/ui"
 )
 
@@ -40,14 +41,14 @@ func gsRecord(edt *editor, recordBox *ui.HBox) {
 	row := mainBox.AddHbox()
 
 	column := row.AddVbox()
-	groupBox := column.AddGroupbox("Save")
+	groupBox := column.AddGroupbox(lang.T("保存", "Save"))
 	form := groupBox.AddForm()
 	form.AddFieldTypeRows(r,
 		codeplug.FtGsSavePreamble,
 		codeplug.FtGsSaveModeReceive,
 	)
 
-	groupBox = column.AddGroupbox("Alert Tone")
+	groupBox = column.AddGroupbox(lang.T("提示音", "Alert Tone"))
 	form = groupBox.AddForm()
 	form.AddFieldTypeRows(r,
 		codeplug.FtGsDisableAllTones,
@@ -57,21 +58,21 @@ func gsRecord(edt *editor, recordBox *ui.HBox) {
 		codeplug.FtGsCallAlertToneDuration,
 	)
 
-	groupBox = column.AddGroupbox("Scan")
+	groupBox = column.AddGroupbox(lang.T("扫描", "Scan"))
 	form = groupBox.AddForm()
 	form.AddFieldTypeRows(r,
 		codeplug.FtGsScanDigitalHangTime,
 		codeplug.FtGsScanAnalogHangTime,
 	)
 
-	groupBox = column.AddGroupbox("Lone Worker")
+	groupBox = column.AddGroupbox(lang.T("单独工作者", "Lone Worker"))
 	form = groupBox.AddForm()
 	form.AddFieldTypeRows(r,
 		codeplug.FtGsLoneWorkerResponseTime,
 		codeplug.FtGsLoneWorkerReminderTime,
 	)
 
-	groupBox = column.AddGroupbox("Power On Password")
+	groupBox = column.AddGroupbox(lang.T("开机密码", "Power On Password"))
 	form = groupBox.AddForm()
 	form.AddFieldTypeRows(r,
 		codeplug.FtGsPwAndLockEnable,
@@ -79,7 +80,7 @@ func gsRecord(edt *editor, recordBox *ui.HBox) {
 	)
 
 	if r.HasFieldType(codeplug.FtGsCHVoiceAnnouncement) {
-		groupBox = column.AddGroupbox("Voice Announcement")
+		groupBox = column.AddGroupbox(lang.T("语音播报", "Voice Announcement"))
 		form = groupBox.AddForm()
 		form.AddFieldTypeRows(r,
 			codeplug.FtGsCHVoiceAnnouncement,
@@ -105,7 +106,7 @@ func gsRecord(edt *editor, recordBox *ui.HBox) {
 		codeplug.FtGsSetKeypadLockTime,
 	)
 
-	groupBox = column.AddGroupbox("Talkaround")
+	groupBox = column.AddGroupbox(lang.T("脱网", "Talkaround"))
 	form = groupBox.AddForm()
 	form.AddFieldTypeRows(r,
 		codeplug.FtGsGroupCallHangTime,
@@ -135,7 +136,7 @@ func gsRecord(edt *editor, recordBox *ui.HBox) {
 		codeplug.FtGsEnableContactsCSV,
 	)
 
-	groupBox = column.AddGroupbox("Intro Screen")
+	groupBox = column.AddGroupbox(lang.T("开机画面", "Intro Screen"))
 	form = groupBox.AddForm()
 	form.AddFieldTypeRows(r,
 		codeplug.FtGsIntroScreen,

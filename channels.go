@@ -25,6 +25,7 @@ package main
 
 import (
 	"github.com/dalefarnsworth-dmr/codeplug"
+	"github.com/dalefarnsworth-dmr/editcp/lang"
 	"github.com/dalefarnsworth-dmr/ui"
 )
 
@@ -38,7 +39,7 @@ func ciRecord(edt *editor, recordBox *ui.HBox) {
 	row := mainBox.AddHbox()
 	column := row.AddVbox()
 
-	groupBox := column.AddGroupbox("Digital/Analog Data")
+	groupBox := column.AddGroupbox(lang.T("数字/模拟数据", "Digital/Analog Data"))
 	column = groupBox.AddVbox()
 	form := column.AddForm()
 
@@ -72,7 +73,7 @@ func ciRecord(edt *editor, recordBox *ui.HBox) {
 		codeplug.FtCiReceiveGPSInfo)
 
 	column = row.AddVbox()
-	groupBox = column.AddGroupbox("Digital Data")
+	groupBox = column.AddGroupbox(lang.T("数字数据", "Digital Data"))
 	column = groupBox.AddVbox()
 	form = column.AddForm()
 
@@ -98,7 +99,7 @@ func ciRecord(edt *editor, recordBox *ui.HBox) {
 	}
 
 	row = mainBox.AddHbox()
-	groupBox = row.AddGroupbox("Analog Data")
+	groupBox = row.AddGroupbox(lang.T("模拟数据", "Analog Data"))
 	row = groupBox.AddHbox()
 	column = row.AddVbox()
 	form = column.AddForm()

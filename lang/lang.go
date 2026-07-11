@@ -40,3 +40,36 @@ func T(zh, en string) string {
 	}
 	return zh
 }
+
+
+// RecordTypeEN 返回记录类型名称的英文版本
+var recordTypeEN = map[string]string{
+	"信道列表": "Channels",
+	"区域": "Zones",
+	"联系人": "Contacts",
+}
+
+// RecordTypeCN 返回记录类型名称的中文版本
+var recordTypeCN = map[string]string{}
+
+func init() {
+	for k, v := range recordTypeEN {
+		recordTypeCN[v] = k
+	}
+}
+
+// TRecordType 根据地返回记录类型显示名称
+func TRecordType(name string) string {
+	mu.RLock()
+	defer mu.RUnlock()
+	if currentLang == EN {
+		if en, ok := recordTypeEN[name]; ok {
+			return en
+		}
+	} else {
+		if cn, ok := recordTypeCN[name]; ok {
+			return cn
+		}
+	}
+	return name
+}

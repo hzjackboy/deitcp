@@ -27,6 +27,7 @@ import (
 	"fmt"
 
 	"github.com/dalefarnsworth-dmr/codeplug"
+	"github.com/dalefarnsworth-dmr/editcp/lang"
 	"github.com/dalefarnsworth-dmr/ui"
 )
 
@@ -70,7 +71,7 @@ func bdRecord(edt *editor, recordBox *ui.HBox) {
 	column1 := mainRow.AddVbox()
 	column1.SetFixedWidth()
 
-	groupBox := column1.AddGroupbox("对讲机按键")
+	groupBox := column1.AddGroupbox(lang.T("对讲机按键", "Radio Buttons"))
 	form = groupBox.AddForm()
 
 	column1.AddFiller()
@@ -93,7 +94,7 @@ func bdRecord(edt *editor, recordBox *ui.HBox) {
 	column = row.AddVbox()
 	row.AddFiller()
 	column.SetFixedWidth()
-	groupBox = column.AddGroupbox("一键通")
+	groupBox = column.AddGroupbox(lang.T("一键通", "One Touch Access"))
 	table := groupBox.AddTable()
 	w := edt.recordWindow(r.Type())
 	records = w.Records(codeplug.RtOneTouch)
@@ -130,7 +131,7 @@ func bdRecord(edt *editor, recordBox *ui.HBox) {
 	column.SetFixedWidth()
 	row.AddFiller()
 
-	groupBox = column.AddGroupbox("数字键快速联系人")
+	groupBox = column.AddGroupbox(lang.T("数字键快速联系人", "Number Key Quick Contact Access"))
 	table = groupBox.AddTable()
 	records = w.Records(codeplug.RtNumberKey)
 	labels = make([]string, 0)

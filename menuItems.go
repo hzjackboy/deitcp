@@ -25,6 +25,7 @@ package main
 
 import (
 	"github.com/dalefarnsworth-dmr/codeplug"
+	"github.com/dalefarnsworth-dmr/editcp/lang"
 	"github.com/dalefarnsworth-dmr/ui"
 )
 
@@ -50,7 +51,7 @@ func miRecord(edt *editor, recordBox *ui.HBox) {
 
 	column2 = row2.AddVbox()
 
-	groupBox := column.AddGroupbox("Contacts")
+	groupBox := column.AddGroupbox(lang.T("联系人", "Contacts"))
 	column2 = groupBox.AddVbox()
 	form = column2.AddForm()
 	form.AddFieldTypeRows(r,
@@ -69,7 +70,7 @@ func miRecord(edt *editor, recordBox *ui.HBox) {
 		codeplug.FtMiRadioDisable,
 	)
 
-	groupBox = column.AddGroupbox("Call Log")
+	groupBox = column.AddGroupbox(lang.T("通话记录", "Call Log"))
 	column2 = groupBox.AddVbox()
 	form = column2.AddForm()
 	form.AddFieldTypeRows(r,
@@ -84,7 +85,7 @@ func miRecord(edt *editor, recordBox *ui.HBox) {
 	)
 
 	column = row.AddVbox()
-	groupBox = column.AddGroupbox("Utilities")
+	groupBox = column.AddGroupbox(lang.T("工具", "Utilities"))
 	column2 = groupBox.AddVbox()
 	form = column2.AddForm()
 	form.AddFieldTypeRows(r,
@@ -108,7 +109,7 @@ func miRecord(edt *editor, recordBox *ui.HBox) {
 		codeplug.FtMiProgramRadio,
 	)
 
-	groupBox = column.AddGroupbox("Scan")
+	groupBox = column.AddGroupbox(lang.T("扫描", "Scan"))
 	column2 = groupBox.AddVbox()
 	form = column2.AddForm()
 	form.AddFieldTypeRows(r,

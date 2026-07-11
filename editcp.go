@@ -246,7 +246,7 @@ func displayPreviousPanic(text string) {
 
 	mw := ui.NewMainWindow()
 	mw.Resize(600, 400)
-	mw.SetTitle("上次崩溃信息")
+	mw.SetTitle(lang.T("上次崩溃信息", "Previous Crash Message"))
 	mw.ConnectClose(func() bool {
 		if removeFile {
 			l.RemovePreviousPanicFile()
@@ -1316,7 +1316,7 @@ func (edt *editor) newRecordWindow(rType codeplug.RecordType, writable bool, fil
 
 	cp := edt.codeplug
 	r := cp.Record(rType)
-	w.SetTitle(cp.Filename() + edt.titleSuffix() + " " + r.TypeName())
+	w.SetTitle(cp.Filename() + edt.titleSuffix() + " " + lang.TRecordType(r.TypeName()))
 
 	windowBox := w.AddHbox()
 	var recordFunc func()
