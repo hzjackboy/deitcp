@@ -1,119 +1,122 @@
-## Codeplug editor for the MD380/MD390/MD40 DMR Radios
+# 🎛️ editcp / Codeplug Editor
 
-## Introduction
-This program is similar in purpose to the [MD380 CPS program](
-http://www.tyt888.com/?mod=download) provided by TYT Electronics
-Technology Co., LTD.  It provides several features that CPS lacks,
-while not implementing all features of CPS.
-I wrote `editcp` because I wanted to be able to edit codeplugs in Linux.
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-This codeplug editor works for the Tytera MD380 and MD390 as well as the
-Alinco DJ-MD40 radios.  Support for additional radio models is likely,
-but is not scheduled at this time.
+**editcp** — DMR 对讲机写频编辑工具，适用于 Tytera MD380/MD390、Alinco DJ-MD40 等机型。  
+**editcp** — A codeplug editor for Tytera MD380/MD390, Alinco DJ-MD40, and compatible DMR radios.
+
+---
+
+## 🇨🇳 中文说明
+
+### 简介
+
+editcp 是一个开源的 DMR 对讲机写频（codeplug）编辑工具，功能类似于 TYT 官方 CPS 软件。
+本项目基于 [DaleFarnsworth-DMR/editcp](https://github.com/DaleFarnsworth-DMR/editcp) 进行了 **macOS 移植和适配**。
+
+### 主要功能
+
+- 编辑 General Settings、Channels、Contacts、Zones、Group Lists、Scan Lists
+- 拖拽排序列表项
+- 同时打开多个写频文件，跨文件拖拽复制
+- 无限撤销/重做
+- 输入验证和写频完整性检查
+- 导入/导出为文本文件、Excel 表格、JSON 格式
+- **读/写对讲机写频数据**（通过 USB/DFU 协议）
+- 写入固件和用户数据库（支持 md380tools）
+
+### macOS 构建
+
+```bash
+# 前置要求（通过 Homebrew 安装）
+brew install go qt@5 pkg-config libusb
+
+# 一键构建
+./build_macos.sh
+
+# 或使用 Makefile
+make -f Makefile.macos build
+```
+
+构建完成后，App 位于 `deploy/darwin/deitcp.app`。
+
+### macOS 使用注意事项
+
+1. **代码签名**：首次运行如果闪退，终端执行以下命令：
+   ```bash
+   codesign --force --deep --sign - deploy/darwin/deitcp.app
+   ```
+2. **USB 权限**：系统设置 → 隐私与安全性 → USB 配件 → 允许
+3. **对讲机刷机模式**：关机 → 按住 **PTT + PTT 上方按键** → 开机（LED 红绿交替闪烁）
+4. **首次运行**：如果提示"无法验证开发者"，右键 → 打开
+
+---
+
+## 🇬🇧 English README
+
+### Introduction
+
+editcp is an open-source codeplug editor for DMR radios, similar in purpose to the official TYT CPS software.  
+This fork is a **macOS port** based on [DaleFarnsworth-DMR/editcp](https://github.com/DaleFarnsworth-DMR/editcp).
 
 ### Features
-* `Editcp` permits the editing of General Settings, Channels, Contacts, Zones,
-Group Lists, and Scan Lists.
-* It supports reordering list items via drag-and-drop.
-* Multiple codeplugs may be opened simultaneously and
-items may be copied from one code plug to another via drag-and-drop.
-* `Editcp` provides unlimited undo/redo.
-* `Editcp` performs extensive input validation and codeplug entry validation.
-* Codeplug information may be exported to and imported from human readable
-text files.
-* `Editcp` can edit .rdt files as well as the .bin files produced
-by [md380tools](https://github.com/travisgoodspeed/md380tools).
 
-## Building from Source
-`Editcp` development has been done on Linux (specifically Ubuntu 17.04),
-so that is the recommended platform for building from source.
+- Edit General Settings, Channels, Contacts, Zones, Group Lists, and Scan Lists
+- Drag-and-drop reordering of list items
+- Open multiple codeplugs simultaneously and copy items between them
+- Unlimited undo/redo
+- Comprehensive input validation and codeplug integrity checking
+- Export/Import to/from plain text, Excel spreadsheets, and JSON
+- **Read/Write codeplug data to/from radio** (via USB DFU protocol)
+- Firmware and user database writing (md380tools support)
 
-1. `Editcp` is written in [go](https://golang.org/).  You must download
-and install [go](https://golang.org/dl/) version 1.8 or later.
-
-2. Install [git](https://git-scm.com/). On Debian, Ubuntu, and other
-Debian-derived systems that may be done by:
+### macOS Build
 
 ```bash
-$ sudo apt-get install git
+# Prerequisites (install via Homebrew)
+brew install go qt@5 pkg-config libusb
+
+# One-click build
+./build_macos.sh
+
+# Or use the Makefile
+make -f Makefile.macos build
 ```
 
-3. `Editcp` uses the QT GUI library. You'll need to install
-the [Qt binding for Go](https://github.com/therecipe/qt). I recommend
-the docker installation described at
-https://github.com/therecipe/qt/wiki/Deploying-Linux-to-Linux
-and
-https://github.com/therecipe/qt/wiki/Deploying-Linux-to-Windows-32-bit-Static
+After building, the app bundle is at `deploy/darwin/deitcp.app`.
 
-4. `Editcp` uses the libusb-1.0-0-dev package. You'll need to install it.
-Also, if you're using the docker qt installation, you'll need to install
-libusb-1.0-0-dev in the docker images it uses. This can be done by running
+### macOS Usage Notes
+
+1. **Code Signing**: If the app crashes on first launch, run:
+   ```bash
+   codesign --force --deep --sign - deploy/darwin/deitcp.app
+   ```
+2. **USB Permission**: System Settings → Privacy & Security → USB Accessories → Allow
+3. **Radio Bootloader Mode**: Power off → Hold **PTT + Button above PTT** → Power on (LED flashes green/red)
+4. **Gatekeeper**: Right-click → Open if "unverified developer" warning appears
+
+---
+
+## 🛠️ Building on Linux / Windows
+
+See the [original project](https://github.com/DaleFarnsworth-DMR/editcp) for Linux/Windows build instructions.
+
 ```bash
-$ sudo docker tag therecipe/qt:windows_32_static therecipe/qt:windows_32_static-orig
-$ sudo docker tag therecipe/qt:linux therecipe/qt:linux-orig
-$ sudo make docker_usb
-```
-If you are building under macOS, then there is no need to use docker,
-see
-[Deploying Linux to macOS](https://github.com/therecipe/qt/wiki/Deploying-Linux-to-macOS).
+# Linux
+make
 
-5. Get the source code:
-```bash
-$ go get -d github.com/dalefarnsworth-dmr/editcp/...
-$ go get github.com/google/gousb
-$ go get github.com/tealeg/xlsx
+# macOS
+make -f Makefile.macos build
+
+# Windows (cross-compile from Linux with Docker)
+make windows
 ```
 
-6. Change to the `editcp` source directory:
-```bash
-$ cd $GOPATH/src/github.com/dalefarnsworth-dmr/editcp
-```
+## 📄 License
 
-7. Build `editcp`:
-```bash
-$ make
-```
-Under macOS, instead of running `make`, run `qtdeploy build desktop`
+GNU General Public License v3.0. See [LICENSE](LICENSE).
 
-8. Install `editcp`:
-```bash
-$ make install
-```
-You will be prompted for a directory name where a symbolic link to
-the `editcp` executable will be placed. If you don't have write permissions
-for that directory, you will need to run this command as root.
-Under macOS, skip running `make install`
+## 👤 Author
 
-9. You man now run `editcp`, optionally passing the name of a codeplug file.
-```bash
-$ editcp
-```
-or
-```bash
-$ editcp file.rdt
-```
-Under macOS, the app is at `deploy/darwin/editcp.app`.  To run from
-the Terminal so as to see stdout and stderr, run
-`./deploy/darwin/editcp.app/Contents/MacOS/editcp`
-
-## Installing Pre-built Executables
-Instructions for downloading pre-built executables for Windows and Linux are
-available at https://www.farnsworth.org/dale/codeplug/editcp.
-
-## Disclaimer
-While
-no problems have been observed in radios after loading codeplugs edited by
-`editcp`, I can't guarantee that such will never occur. Use `editcp` at
-your own risk.
-
-## Contributing
-Contributions to `editcp` are welcome. If you've fixed a bug or implemented
-a cool new feature that you would like to share, please feel free to open
-a pull request here.
-
-## Author
-Dale Farnsworth
-
-<dale@farnsworth.org>
-
-IRC: libera.chat channel: #md380, user: dfarnsworth
+**Dale Farnsworth** — [dale@farnsworth.org](mailto:dale@farnsworth.org)  
+macOS port by [hzjackboy](https://github.com/hzjackboy)
