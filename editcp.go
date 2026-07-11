@@ -937,14 +937,17 @@ func (edt *editor) updateMenuBar() {
 		edt.updateButtons()
 	})
 	langMenu.AddAction(lang.T("英文", "English"), func() {
-		lang.SetLang(lang.EN)
+			lang.SetLang(lang.EN)
 			codeplug.SetFieldLang(false)
 			codeplug.SetRecordLang(false)
 			for _, w := range edt.mainWindow.RecordWindows() {
 				w.Close()
 			}
-		edt.updateMenuBar()
-		edt.updateButtons()
+			for k := range edt.mainWindow.RecordWindows() {
+				delete(edt.mainWindow.RecordWindows(), k)
+			}
+			edt.updateMenuBar()
+			edt.updateButtons()
 	})
 }
 
