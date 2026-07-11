@@ -161,10 +161,10 @@ else
 fi
 
 #------------------------------------------------------------------------------
-# macOS 代码签名（macOS 15+ 需要）
+# macOS App 图标
 #------------------------------------------------------------------------------
 echo ""
-echo "[6/6] macOS 代码签名..."
+echo "[6/7] 创建 App 图标..."
 
 APP_BUNDLE=""
 if [ -d "deploy/darwin/deitcp.app" ]; then
@@ -172,6 +172,30 @@ if [ -d "deploy/darwin/deitcp.app" ]; then
 elif [ -d "deploy/darwin/editcp.app" ]; then
     APP_BUNDLE="deploy/darwin/editcp.app"
 fi
+
+if [ -n "$APP_BUNDLE" ] && [ -f "logo/editcp_32x32_01.png" ]; then
+    ICONSET="$APP_BUNDLE/Contents/Resources/AppIcon.iconset"
+    mkdir -p "$ICONSET"
+    sips -z 16 16 "logo/editcp_32x32_01.png" --out "$ICONSET/icon_16x16.png" >/dev/null 2>&1
+    sips -z 32 32 "logo/editcp_32x32_01.png" --out "$ICONSET/icon_16x16@2x.png" >/dev/null 2>&1
+    sips -z 32 32 "logo/editcp_32x32_01.png" --out "$ICONSET/icon_32x32.png" >/dev/null 2>&1
+    sips -z 64 64 "logo/editcp_32x32_01.png" --out "$ICONSET/icon_32x32@2x.png" >/dev/null 2>&1
+    sips -z 128 128 "logo/editcp_32x32_01.png" --out "$ICONSET/icon_128x128.png" >/dev/null 2>&1
+    sips -z 256 256 "logo/editcp_32x32_01.png" --out "$ICONSET/icon_128x128@2x.png" >/dev/null 2>&1
+    sips -z 256 256 "logo/editcp_32x32_01.png" --out "$ICONSET/icon_256x256.png" >/dev/null 2>&1
+    sips -z 512 512 "logo/editcp_32x32_01.png" --out "$ICONSET/icon_256x256@2x.png" >/dev/null 2>&1
+    sips -z 512 512 "logo/editcp_32x32_01.png" --out "$ICONSET/icon_512x512.png" >/dev/null 2>&1
+    iconutil -c icns "$ICONSET" 2>/dev/null
+    rm -rf "$ICONSET"
+    plutil -replace CFBundleIconFile -string "AppIcon" "$APP_BUNDLE/Contents/Info.plist" 2>/dev/null
+    echo "  ✓ App 图标已创建"
+fi
+
+#------------------------------------------------------------------------------
+# macOS 代码签名（macOS 15+ 需要）
+#------------------------------------------------------------------------------
+echo ""
+echo "[7/7] macOS 代码签名..."
 
 if [ -n "$APP_BUNDLE" ]; then
     echo "  创建 USB 授权文件..."
