@@ -37,6 +37,7 @@ import (
 	l "github.com/dalefarnsworth-dmr/debug"
 	"github.com/dalefarnsworth-dmr/dfu"
 	"github.com/dalefarnsworth-dmr/ui"
+	"github.com/dalefarnsworth-dmr/editcp/lang"
 	"github.com/dalefarnsworth-dmr/userdb"
 	"github.com/therecipe/qt/core"
 )
@@ -250,7 +251,7 @@ func writeUV380Users() {
 func factoryFirmwareDialog(modelURLs []modelURL) {
 	model, url := modelURLs[0].model, modelURLs[0].url
 	if len(modelURLs) > 1 {
-		title := "写入出厂固件到对讲机..."
+		title := lang.T("写入出厂固件到对讲机...", "Write factory firmware to radio...")
 		upgrade := false
 		var canceled bool
 		canceled, model, url = firmwareDialog(title, modelURLs, upgrade)
@@ -271,9 +272,9 @@ func factoryFirmwareDialog(modelURLs []modelURL) {
 func (edt *editor) addRadioMenu(menu *ui.Menu) {
 	cp := edt.codeplug
 	mb := edt.mainWindow.MenuBar()
-	menu = mb.AddMenu("对讲机")
+	menu = mb.AddMenu(lang.T("对讲机", "Radio"))
 
-	menu.AddAction("从对讲机读取写频", func() {
+	menu.AddAction(lang.T("从对讲机读取写频", "Read codeplug from radio"), func() {
 		// macOS 上要跳过 RadioExists()，因为它先打开 USB 设备调用 enterDfuMode，
 		// 会发送 detach 信号让对讲机重启进刷机模式（断开USB重连），
 		// 然后 Close() 关闭 libusb context。后续 ReadRadio 重新打开设备时
@@ -289,8 +290,8 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		cp := edt.codeplug
 
 		msgs := []string{
-			"准备从对讲机读取写频...",
-			"正在从对讲机读取写频...",
+			lang.T("准备从对讲机读取写频...", "Preparing to read codeplug from radio..."),
+			lang.T("正在从对讲机读取写频...", "Reading codeplug from radio..."),
 		}
 		msgIndex := 0
 		pd := ui.NewProgressDialog(msgs[msgIndex])
@@ -327,7 +328,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		edt.updateMenuBar()
 	})
 
-		menu.AddAction("写入写频到对讲机", func() {
+		menu.AddAction(lang.T("写入写频到对讲机", "Write codeplug to radio"), func() {
 			var pd *ui.ProgressDialog
 			var progressShown bool
 			defer func() {
@@ -358,7 +359,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 				}
 			}
 
-			title := "写入写频到对讲机"
+			title := lang.T("写入写频到对讲机", "Write codeplug to radio")
 			model := codeplug.ModelTypes(cp.Model())
 			freq := cp.FrequencyRange()
 			warn := `
@@ -373,7 +374,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 			}
 
 			msgs := []string{
-				"准备写入写频到对讲机...",
+				lang.T("准备写入写频到对讲机...", "Preparing to write codeplug to radio..."),
 				"正在擦除对讲机写频...",
 				"正在写入写频到对讲机...",
 			}
@@ -403,9 +404,9 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 
 	menu.AddSeparator()
 
-	fwMenu := menu.AddMenu("写入出厂固件到对讲机...")
+	fwMenu := menu.AddMenu(lang.T("写入出厂固件到对讲机...", "Write factory firmware to radio..."))
 
-	fwMenu.AddAction("写入MD-380出厂固件...", func() {
+	fwMenu.AddAction(lang.T("写入MD-380出厂固件...", "Write MD-380 factory firmware..."), func() {
 		dir := "https://farnsworth.org/dale/dmr/factory_firmware/md380/"
 
 		modelURLs := []modelURL{
@@ -420,7 +421,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		factoryFirmwareDialog(modelURLs)
 	})
 
-	fwMenu.AddAction("写入MD-390出厂固件...", func() {
+	fwMenu.AddAction(lang.T("写入MD-390出厂固件...", "Write MD-390 factory firmware..."), func() {
 		dir := "https://farnsworth.org/dale/dmr/factory_firmware/md390/"
 
 		modelURLs := []modelURL{
@@ -476,7 +477,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 	*/
 
 	menu.AddSeparator()
-	writeUsersMenu := menu.AddMenu("写入用户数据库到对讲机...")
+	writeUsersMenu := menu.AddMenu(lang.T("写入用户数据库到对讲机...", "Write user database to radio..."))
 
 	writeUsersMenu.AddAction("写入md380tools用户数据库到对讲机...", writeMD380toolsUsers)
 	writeUsersMenu.AddAction("写入MD2017用户数据库到对讲机...", writeMD2017Users)
@@ -486,7 +487,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 
 	md380toolsMenu := menu.AddMenu("md380tools...")
 
-	md380toolsMenu.AddAction("写入用户数据库到对讲机...", writeMD380toolsUsers)
+	md380toolsMenu.AddAction(lang.T("写入用户数据库到对讲机...", "Write user database to radio..."), writeMD380toolsUsers)
 
 	md380toolsMenu.AddAction("写入md380tools固件到对讲机...", func() {
 		path := "https://farnsworth.org/dale/md380tools/firmware/"

@@ -36,7 +36,7 @@ import (
 	l "github.com/dalefarnsworth-dmr/debug"
 	"github.com/dalefarnsworth-dmr/ui"
 	"github.com/therecipe/qt/core"
-	"deitcp/lang"
+	"github.com/dalefarnsworth-dmr/editcp/lang"
 )
 
 // This turns on the experimental checkbox in preferences
@@ -921,6 +921,20 @@ func (edt *editor) updateMenuBar() {
 	})
 	menu.AddAction(lang.T("致谢...", "Thanks..."), func() {
 		thanks()
+	})
+
+	menu.AddSeparator()
+
+	langMenu := menu.AddMenu(lang.T("语言", "Language"))
+	langMenu.AddAction(lang.T("中文", "Chinese"), func() {
+		lang.SetLang(lang.ZH)
+		edt.updateMenuBar()
+		edt.updateButtons()
+	})
+	langMenu.AddAction(lang.T("英文", "English"), func() {
+		lang.SetLang(lang.EN)
+		edt.updateMenuBar()
+		edt.updateButtons()
 	})
 }
 

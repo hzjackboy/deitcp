@@ -25,15 +25,16 @@ package main
 
 import (
 	"github.com/dalefarnsworth-dmr/ui"
+	"github.com/dalefarnsworth-dmr/editcp/lang"
 )
 
 func (edt *editor) preferences() {
-	dialog := ui.NewDialog("偏好设置")
+	dialog := ui.NewDialog(lang.T("偏好设置", "Preferences"))
 
 	loadSettings()
 
 	row := dialog.AddHbox()
-	groupBox := row.AddGroupbox("选项")
+	groupBox := row.AddGroupbox(lang.T("选项", "Options"))
 	form := groupBox.AddForm()
 
 	editButtonsEnabled := settings.editButtonsEnabled
@@ -41,28 +42,28 @@ func (edt *editor) preferences() {
 	checkbox := ui.NewCheckboxWidget(checked, func(checked bool) {
 		editButtonsEnabled = checked
 	})
-	form.AddRow("在主窗口启用编辑按钮：", checkbox)
+	form.AddRow(lang.T("在主窗口启用编辑按钮：", "Enable edit buttons on main window:"), checkbox)
 
 	gpsEnabled := settings.gpsEnabled
 	checked = gpsEnabled
 	checkbox = ui.NewCheckboxWidget(checked, func(checked bool) {
 		gpsEnabled = checked
 	})
-	form.AddRow("显示 GPS 字段：", checkbox)
+	form.AddRow(lang.T("显示 GPS 字段：", "Display GPS fields:"), checkbox)
 
 	uniqueContactNames := settings.uniqueContactNames
 	checked = uniqueContactNames
 	checkbox = ui.NewCheckboxWidget(checked, func(checked bool) {
 		uniqueContactNames = checked
 	})
-	form.AddRow("要求联系人名称唯一：", checkbox)
+	form.AddRow(lang.T("要求联系人名称唯一：", "Require Contact names to be unique:"), checkbox)
 
 	autosaveInterval := settings.autosaveInterval
 
 	spinbox := ui.NewSpinboxWidget(autosaveInterval, 0, 60, func(i int) {
 		autosaveInterval = i
 	})
-	form.AddRow("自动保存间隔(分钟)：", spinbox)
+	form.AddRow(lang.T("自动保存间隔(分钟)：", "Auto Save interval (minutes):"), spinbox)
 
 	var experimental bool
 	if needExperimental {
@@ -71,7 +72,7 @@ func (edt *editor) preferences() {
 		checkbox = ui.NewCheckboxWidget(checked, func(checked bool) {
 			experimental = checked
 		})
-		form.AddRow("启用实验性功能：", checkbox)
+		form.AddRow(lang.T("启用实验性功能：", "Enable experimental features:"), checkbox)
 	}
 
 	dialog.AddSpace(2)
@@ -83,7 +84,7 @@ func (edt *editor) preferences() {
 	})
 	row.AddWidget(cancelButton)
 
-	okButton := ui.NewButtonWidget("保存", func() {
+	okButton := ui.NewButtonWidget(lang.T("保存", "Save"), func() {
 		dialog.Accept()
 	})
 	row.AddWidget(okButton)
