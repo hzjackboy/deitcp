@@ -140,7 +140,7 @@ func bdRecord(edt *editor, recordBox *ui.HBox) {
 		table.AddRow(
 			fieldTypeWidget(w, r, codeplug.FtNkContact),
 		)
-		labels = append(labels, fmt.Sprintf(" 数字键 %d", r.Index()))
+		labels = append(labels, fmt.Sprintf(lang.T(" 数字键 %d", " Number key %d"), r.Index()))
 	}
 
 	table.AddLeftLabels(labels)
