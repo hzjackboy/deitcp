@@ -47,7 +47,7 @@ func errorText(edt *editor) string {
 func checkCodeplug(edt *editor) {
 	w := edt.mainWindow.NewWindow()
 	cp := edt.codeplug
-	w.SetTitle(cp.Filename() + edt.titleSuffix() + lang.T(" 无效字段", " Invalid Fields"))
+	w.SetTitle(cp.Filename() + edt.titleSuffix() + lang.T(lang.T(" 无效字段", " Invalid Fields"), " Invalid Fields"))
 
 	windowBox := w.AddVbox()
 

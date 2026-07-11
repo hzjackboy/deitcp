@@ -311,7 +311,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 		if err != nil {
 			pd.Close()
 			title := "读取写频失败"
-			ui.ErrorPopup(title, err.Error()+"\n\n请检查：\n1. 对讲机是否已进入刷机模式（开机时按住PTT+PTT上方按键）\n2. 写频线连接是否正常\n3. USB 权限是否已授权（系统设置 > 隐私 > USB）")
+			ui.ErrorPopup(title, err.Error()+lang.T("\n\n请检查：\n1. 对讲机是否已进入刷机模式（开机时按住PTT+PTT上方按键）\n2. 写频线连接是否正常\n3. USB 权限是否已授权", "\n\nPlease check:\n1. Is the radio in bootloader mode (hold PTT+button above PTT while powering on)\n2. Is the programming cable connected properly\n3. USB permission granted (System Settings > Privacy > USB)"))
 			edt.FreeCodeplug()
 			return
 		}
@@ -398,7 +398,7 @@ func (edt *editor) addRadioMenu(menu *ui.Menu) {
 			pd.Close()
 			if err != nil {
 				title := "写入写频到对讲机失败"
-				ui.ErrorPopup(title, err.Error()+"\n\n请确保对讲机处于刷机模式，写频线连接正常。")
+				ui.ErrorPopup(title, err.Error()+lang.T("\n\n请确保对讲机处于刷机模式，写频线连接正常。", "\n\nMake sure the radio is in bootloader mode and the cable is connected properly."))
 			}
 		}).SetEnabled(cp != nil && cp.Loaded())
 
@@ -654,7 +654,7 @@ func userdbDialog(title string, labelText string) (canceled, download bool) {
 	dialog.AddLabel(labelText[1:])
 
 	form := dialog.AddForm()
-	form.AddRow("下载新的用户数据库文件", downloadCheckbox)
+	form.AddRow(lang.T("下载新的用户数据库文件", "Download new users database file"), downloadCheckbox)
 
 	dialog.AddLabel(lang.T("文件名：", "Filename:"))
 	dialog.AddExistingHbox(filenameBox)
@@ -718,7 +718,7 @@ func firmwareDialog(title string, modelURLs []modelURL, upgrade bool) (canceled 
 
 	groupBox := dialog.AddGroupbox(lang.T("选择对讲机型号", "Select Radio Model"))
 	form := groupBox.AddForm()
-	form.AddRow("对讲机型号", modelCombobox)
+	form.AddRow(lang.T("对讲机型号", "Radio model"), modelCombobox)
 
 	row := dialog.AddHbox()
 

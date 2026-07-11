@@ -49,7 +49,7 @@ func (edt *editor) preferences() {
 	checkbox = ui.NewCheckboxWidget(checked, func(checked bool) {
 		gpsEnabled = checked
 	})
-	form.AddRow(lang.T("显示 GPS 字段：", "Display GPS fields:"), checkbox)
+	form.AddRow(lang.T(lang.T("显示 GPS 字段：", "Display GPS fields:"), "Display GPS fields:"), checkbox)
 
 	uniqueContactNames := settings.uniqueContactNames
 	checked = uniqueContactNames
