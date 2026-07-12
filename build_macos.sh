@@ -175,7 +175,9 @@ fi
 
 # 优先使用高清图标源 (1024x1024)，回退到原 32x32 图标
 ICON_SRC=""
-if [ -f "logo/editcp_hd.png" ]; then
+if [ -f "logo/tubiao_hd.png" ]; then
+    ICON_SRC="logo/tubiao_hd.png"
+elif [ -f "logo/editcp_hd.png" ]; then
     ICON_SRC="logo/editcp_hd.png"
 elif [ -f "logo/editcp_32x32_01.png" ]; then
     ICON_SRC="logo/editcp_32x32_01.png"
