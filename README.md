@@ -78,14 +78,28 @@
 ### 📸 界面截图 / Screenshots
 
 <p align="center">
-  <img src="image/channels-zh.png" width="420" alt="编辑信道 - 中文界面">
-  <img src="image/contacts-zh.png" width="420" alt="编辑联系人 - 中文界面">
+  <img src="image/main-window-en.png" width="700" alt="主界面 - 英文界面">
+  <em>主界面 — 完整的信道/联系人管理</em>
 </p>
-<p align="center">
-  <img src="image/main-window-en.png" width="600" alt="主界面 - 英文界面">
-</p>
+
+<table>
+  <tr>
+    <td align="center"><img src="image/channels-zh.png" width="400" alt="编辑信道"><br><em>编辑信道</em></td>
+    <td align="center"><img src="image/contacts-zh.png" width="400" alt="编辑联系人"><br><em>编辑联系人</em></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="image/general-settings-zh.png" width="380" alt="常规设置"><br><em>常规设置</em></td>
+    <td align="center"><img src="image/scanlists-zh.png" width="400" alt="扫描列表"><br><em>扫描列表</em></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="image/zones-zh.png" width="400" alt="区域管理"><br><em>区域管理</em></td>
+    <td align="center"><img src="image/group-lists-zh.png" width="400" alt="接收组列表"><br><em>接收组列表</em></td>
+  </tr>
+</table>
+
 <p align="center">
   <img src="image/about-dialog.png" width="407" alt="关于对话框">
+  <br><em>关于对话框</em>
 </p>
 
 ---
