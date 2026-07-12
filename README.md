@@ -78,11 +78,11 @@
 ### 📸 界面截图 / Screenshots
 
 <p align="center">
-  <img src="image/ScreenShot_2026-07-12_130056_382.png" width="420" alt="编辑信道 - 中文界面">
-  <img src="image/ScreenShot_2026-07-12_130043_775.png" width="420" alt="编辑联系人 - 中文界面">
+  <img src="image/channels-zh.png" width="420" alt="编辑信道 - 中文界面">
+  <img src="image/contacts-zh.png" width="420" alt="编辑联系人 - 中文界面">
 </p>
 <p align="center">
-  <img src="image/ScreenShot_2026-07-12_125956_632.png" width="600" alt="主界面 - 英文界面">
+  <img src="image/main-window-en.png" width="600" alt="主界面 - 英文界面">
 </p>
 <p align="center">
   <img src="image/about-dialog.png" width="407" alt="关于对话框">
