@@ -75,6 +75,21 @@
 | **USB 权限** | 自动配置 `com.apple.security.device.usb` 授权 |
 | **自动构建** | 一键构建脚本，自动处理 Qt 框架部署和签名 |
 
+### 📸 界面截图 / Screenshots
+
+<p align="center">
+  <img src="image/ScreenShot_2026-07-12_130056_382.png" width="420" alt="编辑信道 - 中文界面">
+  <img src="image/ScreenShot_2026-07-12_130043_775.png" width="420" alt="编辑联系人 - 中文界面">
+</p>
+<p align="center">
+  <img src="image/ScreenShot_2026-07-12_125956_632.png" width="600" alt="主界面 - 英文界面">
+</p>
+<p align="center">
+  <img src="image/about-dialog.png" width="407" alt="关于对话框">
+</p>
+
+---
+
 ### 与上游的区别
 
 | 对比项 | 上游 (DaleFarnsworth-DMR) | 本 Fork |
